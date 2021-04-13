@@ -9,23 +9,16 @@ namespace RZ
   
         [InputBus]
         private IndexControl controlA;
-
         [InputBus]
         private IndexControl controlB;
-
         [OutputBus]
-        private IndexValue outputA;
-        
+        private IndexValue outputA;    
         [OutputBus]
         private IndexValue outputB;
-        
-        
         [OutputBus]
-
         private IndexControl controlout;
         [InputBus]
         private IndexControl control;
-
         private bool running = false;
         private int i, j, k = 0;
         private int Addr;
@@ -52,7 +45,6 @@ namespace RZ
                 outputB.Ready = true;
                 started = true;
 
-                
                 outputA.Addr =  i *width*height + j*width + k ;
                 outputB.Addr =  i *width*height + j*width + k ;
                 
@@ -100,8 +92,6 @@ namespace RZ
 
                     started = true;
                 }
-                
-
                else {
                     if (started == true){
                         

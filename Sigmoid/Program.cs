@@ -54,9 +54,10 @@ namespace Sigmoid
 
             var sig_index_A = Scope.CreateBus<IndexValue>();
             // var sig_index_B = Scope.CreateBus<IndexValue>();
-
             var pipeout_sig = Scope.CreateBus<IndexValue>();
             var pipeout1_sig = Scope.CreateBus<IndexValue>();
+            var pipeout2_sig = Scope.CreateBus<IndexValue>();
+            var pipeout3_sig = Scope.CreateBus<IndexValue>();
             var sig_result = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
 
@@ -67,10 +68,17 @@ namespace Sigmoid
 
             var sig_ind = new SigIndex(control_in, sig_index_A ,control_out,  testcontrol);
             var pipe_sig = new Pipe(sig_index_A, pipeout_sig);
-            var sigmoid = new Sigmoid(ram_in.ReadResult,pipeout_sig, sig_result);
-            var pipe1_sig = new Pipe(pipeout_sig, pipeout1_sig );
 
-            var toram_sig = new ToRam(sig_result, pipeout1_sig, ram_out.WriteControl);
+            var sigmoid_1 = new Sigmoid_1(ram_in.ReadResult,pipeout_sig, sig_result);
+            var pipe1_sig = new Pipe(pipeout_sig, pipeout1_sig);
+
+            var sigmoid_2 = new Sigmoid_2(ram_in.ReadResult,pipeout1_sig, sig_result);
+            var pipe2_sig = new Pipe(pipeout1_sig, pipeout2_sig);
+
+            var sigmoid_3 = new Sigmoid_3(ram_in.ReadResult,pipeout2_sig, sig_result);
+            var pipe3_sig = new Pipe(pipeout2_sig, pipeout3_sig);
+
+            var toram_sig = new ToRam(sig_result, pipeout3_sig, ram_out.WriteControl);
 
 
 

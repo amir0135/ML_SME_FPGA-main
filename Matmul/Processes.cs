@@ -4,74 +4,50 @@ using Deflib;
 
 namespace Matmul
 {
-    
     [ClockedProcess]
     public class MatMul_add : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputAB;
-        
+        private ValueTransfer m_inputAB;
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputC;
-
-        
         [InputBus]
         private IndexValue input_pipe;
-
         [OutputBus]
         private ValueTransfer v_output;
-
-     
-        public MatMul_add(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputAB, SME.Components.SimpleDualPortMemory<double>.IReadResult inputC, ValueTransfer output)
+        public MatMul_add(IndexValue inputpipe, ValueTransfer inputAB, SME.Components.SimpleDualPortMemory<double>.IReadResult inputC, ValueTransfer output)
         {
-
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputAB = inputAB ?? throw new ArgumentNullException(nameof(inputAB));
             m_inputC = inputC ?? throw new ArgumentNullException(nameof(inputC));
             v_output = output ?? throw new ArgumentNullException(nameof(output));
-
         }
-
         protected override void OnTick(){
-        
             if (input_pipe.Ready == true){
-
-                v_output.value = m_inputC.Data + m_inputAB.Data;
-                
+                v_output.value = m_inputC.Data + m_inputAB.value;
             }
             else{
                 v_output.value = 0;
             }
-
         }
     }
-
-        [ClockedProcess]
+    [ClockedProcess]
     public class MatMul : SimpleProcess
     {
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputA;
-
-
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputB;
-        
-        
         [InputBus]
         private IndexValue input_pipe;
-
         [OutputBus]
         private ValueTransfer v_output;
-
-     
-        public MatMul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, SME.Components.SimpleDualPortMemory<double>.IReadResult inputC,   ValueTransfer output)
+        public MatMul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, ValueTransfer output)
         {
-
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputA = inputA ?? throw new ArgumentNullException(nameof(inputA));
             m_inputB = inputB ?? throw new ArgumentNullException(nameof(inputB));
             v_output = output ?? throw new ArgumentNullException(nameof(output));
-
         }
 
         protected override void OnTick(){
@@ -83,13 +59,11 @@ namespace Matmul
             else{
                 v_output.value = 0;
             }
-
         }
-
     }
 
     [ClockedProcess]
-public class MatMulIndex : SimpleProcess
+    public class MatMulIndex : SimpleProcess
     {
         [InputBus]
         private IndexControl controlA;
@@ -190,6 +164,7 @@ public class MatMulIndex : SimpleProcess
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
                         controlout.OffsetC = controlA.OffsetC;
+                        controlout.Dim = controlA.Dim;
                         started = false;   
                     }
                     else{
@@ -204,29 +179,17 @@ public class MatMulIndex : SimpleProcess
         }         
     }
  
-
-
- 
-
         public class Forward : SimpleProcess{
-
         [InputBus]
-        
         private IndexValue old_input;
-
         [InputBus]
         private IndexValue new_input;
-        
         [InputBus]
         private ValueTransfer v_inputNew;
-
          [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult v_inputOld;
-
         [OutputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult v_output;
-
-
         public Forward(IndexValue old_input, IndexValue new_input, ValueTransfer v_inputNew, SME.Components.SimpleDualPortMemory<double>.IReadResult v_inputOld, SME.Components.SimpleDualPortMemory<double>.IReadResult v_output)
         {
             this.old_input = old_input;
@@ -234,12 +197,10 @@ public class MatMulIndex : SimpleProcess
             this.v_inputNew = v_inputNew;
             this.v_inputOld = v_inputOld;
             this.v_output = v_output;
-
         }
         protected override void OnTick(){
             if(new_input.Ready && new_input.Addr == old_input.Addr){
                 v_output.Data = v_inputNew.value;
-
             }
             else if(old_input.Ready){
                 v_output.Data = v_inputOld.Data;
@@ -247,10 +208,6 @@ public class MatMulIndex : SimpleProcess
             else{
                 v_output.Data = 0;
             }
-            
-
         }
-
-
     }
 }    

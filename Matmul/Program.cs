@@ -9,6 +9,7 @@ using Deflib;
 namespace Matmul
 {       
 
+
     class MainClass{
         public static void Main(string[] args)
         {
@@ -21,7 +22,6 @@ namespace Matmul
 
                 var x_data =  Deflib.Generate_data.csvfile("../Data/x.csv");
                 var tra_W0_data = Generate_transpose.transpose();
-                
 
                 var matmul_expected = Deflib.Functions.Flatten(Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0));
 
@@ -58,36 +58,47 @@ namespace Matmul
             var matmulindex_A = Scope.CreateBus<IndexValue>();
             var matmulindex_B = Scope.CreateBus<IndexValue>();
             var matmulindex_C = Scope.CreateBus<IndexValue>();
-            var matmulindex_AB = Scope.CreateBus<IndexValue>();
             var converter_toram = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
 
+
             var pipeoutmat = Scope.CreateBus<IndexValue>();
             var pipe1outmat = Scope.CreateBus<IndexValue>();
+            var pipe2outmat = Scope.CreateBus<IndexValue>();
+            var pipe1_control = Scope.CreateBus<IndexControl>();
+            var pipe2_control = Scope.CreateBus<IndexControl>();
+            var pipe3_control = Scope.CreateBus<IndexControl>();
+
 
             var forwarded = Scope.CreateBus<SME.Components.SimpleDualPortMemory<double>.IReadResult>();
             var matmulresult = Scope.CreateBus<ValueTransfer>();
-            
+            var matmulindex_AB = Scope.CreateBus<ValueTransfer>();
 
             var ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks* (int)Deflib.Parameters.hidden_size);
-            var ram_out_AB = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks* (int)Deflib.Parameters.hidden_size);
             ram_out_1 = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks* (int)Deflib.Parameters.hidden_size);
 
             var generatemat_x = new Generate(matmulindex_A, ramA_in.ReadControl);
             var generatemat_W0 = new Generate(matmulindex_B, ramB_in.ReadControl);
-            var generate_AB = new Generate(matmulindex_AB, ram_out_AB.ReadControl)
-            var generatematmul = new Generate(matmulindex_C, ram_out.ReadControl);
+            var generatematmul = new Generate(pipeoutmat, ram_out.ReadControl);
             
-            var matmulind = new MatMulIndex(controlA_in, controlB_in, matmulindex_A, matmulindex_B, matmulindex_C, control_out);
+            var matmulind = new MatMulIndex(controlA_in, controlB_in, matmulindex_A, matmulindex_B, matmulindex_C, pipe1_control);
+            var pipe_con1 = new Pipe_control(pipe1_control, pipe2_control);
+            var pipe_con2 = new Pipe_control(pipe2_control, pipe3_control);
+            var pipe_con3 = new Pipe_control(pipe3_control, control_out);
+
+            
             var pipematmul = new Pipe(matmulindex_C, pipeoutmat);
-            var forward = new Forward(pipeoutmat,pipe1outmat, matmulresult, ram_out.ReadResult, forwarded);
-            var matmul = new MatMul(pipeoutmat, ramA_in.ReadResult, ramB_in.ReadResult, forwarded , matmulresult)
-            // skal jeg lave en ny matmulresult, pipeoutmat og forward bus???
-            var matmul_add = new MatMul_add(pipeoutmat, ramAB_in.ReadResult, forwarded , matmulresult);
+            var matmul = new MatMul(pipeoutmat, ramA_in.ReadResult, ramB_in.ReadResult, matmulindex_AB);
             var pipe1 = new Pipe(pipeoutmat, pipe1outmat);
 
-            var toram = new ToRam(matmulresult, pipe1outmat, ram_out.WriteControl);
-            var toram_1 = new ToRam(matmulresult, pipe1outmat, ram_out_1.WriteControl);
+
+            // skal jeg lave en ny matmulresult, pipeoutmat og forward bus???
+            var forward = new Forward(pipe1outmat,pipe2outmat, matmulresult, ram_out.ReadResult, forwarded);
+            var matmul_add = new MatMul_add(pipe1outmat, matmulindex_AB, forwarded , matmulresult);
+            var pipemul = new Pipe(pipe1outmat, pipe2outmat);
+
+            var toram = new ToRam(matmulresult, pipe2outmat, ram_out.WriteControl);
+            var toram_1 = new ToRam(matmulresult, pipe2outmat, ram_out_1.WriteControl);
 
 
 

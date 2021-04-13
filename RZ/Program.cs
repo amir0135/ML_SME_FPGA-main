@@ -46,10 +46,7 @@ namespace RZ
                     .Run();
             }        
         }
-    
-
-
-        }
+    }
     public class RZStage{
 
         public SME.Components.SimpleDualPortMemory<double> ram_out;

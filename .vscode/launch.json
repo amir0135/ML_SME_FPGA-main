@@ -1,248 +1,248 @@
 {
-   // Use IntelliSense to find out which attributes exist for C# debugging
-   // Use hover for the description of the existing attributes
-   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-   "version": "0.3.1",
-   "configurations": [
-        {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/GettingStarted.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "Load_data",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Load_data",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Load_data/bin/Debug/netcoreapp3.1/Load_data.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Load_data",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "Deflib",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Deflib",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Deflib/bin/Debug/netcoreapp3.1/Deflib.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Deflib",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "Transpose",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Transpose",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Transpose/bin/Debug/netcoreapp3.1/Transpose.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Transpose",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "Matmul",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Matmul",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Matmul/bin/Debug/netcoreapp3.1/Matmul.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Matmul",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "HzHr",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-HzHr",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/HzHr/bin/Debug/netcoreapp3.1/HzHr.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/HzHr",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "z_r",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-z_r",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/z_r/bin/Debug/netcoreapp3.1/z_r.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/z_r",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "sum_lastaxis",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-sum_lastaxis",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/sum_lastaxis/bin/Debug/netcoreapp3.1/sum_lastaxis.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/sum_lastaxis",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "zz",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-zz",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/zz/bin/Debug/netcoreapp3.1/zz.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/zz",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "Sigmoid",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Sigmoid",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Sigmoid/bin/Debug/netcoreapp3.1/Sigmoid.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Sigmoid",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "mulmin_sig",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-mulmin_sig",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/mulmin_sig/bin/Debug/netcoreapp3.1/mulmin_sig.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/mulmin_sig",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        
-        {
-            "name": "Softplus",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Softplus",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Softplus/bin/Debug/netcoreapp3.1/Softplus.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Softplus",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "RZ",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-RZ",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/RZ/bin/Debug/netcoreapp3.1/RZ.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/RZ",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "Clamp",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Clamp",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Clamp/bin/Debug/netcoreapp3.1/Clamp.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Clamp",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": "Mean",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Mean",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Mean/bin/Debug/netcoreapp3.1/Mean.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Mean",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "Feedforward",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-Feedforward",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Feedforward/bin/Debug/netcoreapp3.1/Feedforward.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Feedforward",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        }
-    ,]
-}
+    // Use IntelliSense to find out which attributes exist for C# debugging
+    // Use hover for the description of the existing attributes
+    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+    "version": "0.3.1",
+    "configurations": [
+         {
+             "name": ".NET Core Launch (console)",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/GettingStarted.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "Load_data",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Load_data",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Load_data/bin/Debug/netcoreapp3.1/Load_data.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Load_data",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "Deflib",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Deflib",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Deflib/bin/Debug/netcoreapp3.1/Deflib.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Deflib",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "Transpose",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Transpose",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Transpose/bin/Debug/netcoreapp3.1/Transpose.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Transpose",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "Matmul",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Matmul",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Matmul/bin/Debug/netcoreapp3.1/Matmul.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Matmul",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "HzHr",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-HzHr",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/HzHr/bin/Debug/netcoreapp3.1/HzHr.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/HzHr",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "z_r",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-z_r",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/z_r/bin/Debug/netcoreapp3.1/z_r.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/z_r",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "sum_lastaxis",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-sum_lastaxis",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/sum_lastaxis/bin/Debug/netcoreapp3.1/sum_lastaxis.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/sum_lastaxis",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "zz",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-zz",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/zz/bin/Debug/netcoreapp3.1/zz.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/zz",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "Sigmoid",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Sigmoid",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Sigmoid/bin/Debug/netcoreapp3.1/Sigmoid.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Sigmoid",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "mulmin_sig",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-mulmin_sig",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/mulmin_sig/bin/Debug/netcoreapp3.1/mulmin_sig.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/mulmin_sig",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         
+         {
+             "name": "Softplus",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Softplus",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Softplus/bin/Debug/netcoreapp3.1/Softplus.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Softplus",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "RZ",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-RZ",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/RZ/bin/Debug/netcoreapp3.1/RZ.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/RZ",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "Clamp",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Clamp",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Clamp/bin/Debug/netcoreapp3.1/Clamp.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Clamp",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": "Mean",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Mean",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Mean/bin/Debug/netcoreapp3.1/Mean.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Mean",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+         {
+             "name": "Feedforward",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build-Feedforward",
+             // If you have changed target frameworks, make sure to update the program path.
+             "program": "${workspaceFolder}/Feedforward/bin/Debug/netcoreapp3.1/Feedforward.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/Feedforward",
+             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+             "console": "internalConsole",
+             "stopAtEntry": false,
+             "internalConsoleOptions": "openOnSessionStart"
+         },
+ 
+         {
+             "name": ".NET Core Attach",
+             "type": "coreclr",
+             "request": "attach",
+             "processId": "${command:pickProcess}"
+         }
+     ,]
+ }

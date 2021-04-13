@@ -56,6 +56,7 @@ namespace mulmin_sig
 
             var pipeout_mulmin = Scope.CreateBus<IndexValue>();
             var pipeout1_mulmin = Scope.CreateBus<IndexValue>();
+            var pipeout2_mulmin = Scope.CreateBus<IndexValue>();
             var mulmin_result = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
 
@@ -65,20 +66,15 @@ namespace mulmin_sig
             var generate_mulmin = new Generate(mulmin_index_A, ram_in.ReadControl);
 
             var mulmin_ind = new SigIndex(control_in, mulmin_index_A ,control_out,  testcontrol);
-            var pipe_mulmin = new Pipe(mulmin_index_A, pipeout_mulmin);
             var mulmin2 = new MulMin_2(ram_in.ReadResult,pipeout_mulmin, mulmin_result);
+            var pipe_mulmin = new Pipe(mulmin_index_A, pipeout_mulmin);
+
             // ikke sikker på hvordan jeg hente mulmin result in når det er en bus. og skal det pipes i mulmin2 før jeg er helt 
             // færdig med udregning?
             var mulmin1 = new MulMin_1(ram_in.ReadResult,pipeout_mulmin, mulmin_result);
-            var pipe1_mulmin = new Pipe(pipeout_mulmin, pipeout1_mulmin );
+            var pipe1_mulmin = new Pipe(pipeout_mulmin, pipeout1_mulmin);
 
             var toram_mulmin = new ToRam(mulmin_result, pipeout1_mulmin, ram_out.WriteControl);
-
-
-            
-
-
-
         }
     }
 }

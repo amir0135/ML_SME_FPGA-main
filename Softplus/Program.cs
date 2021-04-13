@@ -26,7 +26,6 @@ namespace Softplus
                 var soft_expected = Deflib.Functions.Flatten(Deflib.Generate_data.soft(sla_r_data));
 
                 var array_r = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks,sla_flat);  
-
                 var index_soft = new TestIndexSim(control_soft, 1, (int)Deflib.Parameters.num_networks);
                 var index_r = new TestIndexSim(control_r, 1, (int)Deflib.Parameters.num_networks, 1);
                 
@@ -54,6 +53,7 @@ namespace Softplus
             var soft_index = Scope.CreateBus<IndexValue>();
             var pipeout_soft = Scope.CreateBus<IndexValue>();
             var pipeout1_soft = Scope.CreateBus<IndexValue>();
+            var pipeout2_soft = Scope.CreateBus<IndexValue>();
             var soft_result = Scope.CreateBus<ValueTransfer>();
             
             control_out = Scope.CreateBus<IndexControl>();
@@ -64,14 +64,14 @@ namespace Softplus
 
             var soft_ind = new SigIndex(control_in, soft_index ,control_out,  testcontrol);
             var pipe_soft = new Pipe(soft_index, pipeout_soft);
-            var softplus = new Softplus(ram_in.ReadResult,pipeout_soft, soft_result);
+            var softplus = new Softplus_1(ram_in.ReadResult,pipeout_soft, soft_result);
             var pipe1_soft = new Pipe(pipeout_soft, pipeout1_soft );
 
-            var toram_soft = new ToRam(soft_result, pipeout1_soft, ram_out.WriteControl);
+            var softplus_2 = new Softplus_2(ram_in.ReadResult,pipeout1_soft, soft_result);
+            var pipe2_soft = new Pipe(pipeout1_soft, pipeout2_soft );
 
-
-
-
+            var toram_soft = new ToRam(soft_result, pipeout2_soft, ram_out.WriteControl);
         }
     }
 }
+
