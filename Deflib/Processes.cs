@@ -95,7 +95,6 @@ namespace Deflib
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Select(x => float.Parse(x.Trim(), CultureInfo.InvariantCulture))
                 .ToArray();
-
         }
 
 
@@ -256,6 +255,8 @@ namespace Deflib
                         controlout.Width = control.Width;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
+                        controlout.OffsetC = controlA.OffsetC;
+                        controlout.Dim = controlA.Dim;
                         started = false;
                     }
                     else{
@@ -344,6 +345,96 @@ namespace Deflib
                         controlout.Width = control.Width;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
+                        started = false;
+                    }
+                    else{
+                        controlout.Ready = false;
+                    }
+            
+                    output.Ready = false;
+                }
+            }
+        }         
+    }
+
+
+
+   public class SigIndex_flag : SimpleProcess
+    {
+        [InputBus]
+        private IndexControl controlA;
+        [OutputBus]
+        private IndexValue output;
+        [OutputBus]
+        private IndexControl controlout;
+        [InputBus]
+        private IndexControl control;
+        [OutputBus]
+        private Flag flush;
+        private bool running = false;
+        private int i = 0;
+        private int Addr;
+        private int width, height;
+        private bool Aready = false;
+        private bool started = false;
+
+
+        public SigIndex_flag(IndexControl controlA, IndexValue output, IndexControl controlout, IndexControl control, Flag flush)
+        {   
+            this.controlA = controlA;
+            this.controlout = controlout;
+            this.output = output;
+            this.control = control;
+            this.flush = flush;
+        }
+
+        protected override void OnTick() 
+        {
+        flush.flg = false;
+        if (running == true) 
+            {   
+                started = true;
+                output.Ready = true;
+                
+                output.Addr =  i ;
+                i++;
+                flush.flg = true;
+
+                if (i >= width)
+                {
+                    running = false;
+                }
+            } 
+        
+            else 
+            {
+                Aready |= controlA.Ready;
+
+                if (Aready)
+                {
+                    Aready = false;
+
+                    running = true;
+                    width = control.Width;
+                    height = control.Height;
+
+                    i = 0;
+                    output.Ready = true;
+                    output.Addr = controlA.OffsetA;
+                    started = true;
+                }
+                
+
+               else {
+                    if (started == true){
+                        
+                        controlout.Ready = true;
+                        controlout.Height = control.Height;
+                        controlout.Width = control.Width;
+                        controlout.OffsetA = controlA.OffsetA;
+                        controlout.OffsetB = controlA.OffsetB;
+                        controlout.OffsetC = controlA.OffsetC;
+                        controlout.Dim = controlA.Dim;
                         started = false;
                     }
                     else{

@@ -11,6 +11,8 @@ namespace Softplus
 
         [InputBus]
         private IndexValue index;
+        [InputBus]
+        private Flag flush;
   
         [OutputBus]
         private ValueTransfer m_output;
@@ -18,11 +20,12 @@ namespace Softplus
         private int threshold = 20;
 
 
-        public Softplus_1(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index,  ValueTransfer output)
+        public Softplus_1(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index,  ValueTransfer output, Flag flush)
         {   
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
             m_output = output ?? throw new ArgumentNullException(nameof(output));
+            this.flush = flush ?? throw new ArgumentNullException(nameof(flush));
         }
 
         protected override void OnTick(){
@@ -34,28 +37,31 @@ namespace Softplus
     }
 
         [ClockedProcess]
-    public class Softplus_2: SimpleProcess {
+        public class Softplus_2: SimpleProcess {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private ValueTransfer m_input;
 
         [InputBus]
         private IndexValue index;
+        [InputBus]
+        private Flag flush;
   
         [OutputBus]
         private ValueTransfer m_output;
 
 
-        public Softplus_2(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index,  ValueTransfer output)
+        public Softplus_2(ValueTransfer input, IndexValue index,  ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
             m_output = output ?? throw new ArgumentNullException(nameof(output));
+            this.flush = flush ?? throw new ArgumentNullException(nameof(flush));
         }
 
         protected override void OnTick(){
     
             if (index.Ready == true){
-                m_output.value = Math.Log(1 + m_input.Data);
+                m_output.value = Math.Log(1 + m_input.value);
                     
             }
         }  

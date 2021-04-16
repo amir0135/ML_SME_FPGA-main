@@ -155,6 +155,31 @@ namespace Deflib{
     }
 
 
+    [ClockedProcess]
+    public class ShouldSave : SimpleProcess {
+        [InputBus]
+        private IndexValue input;
+        [InputBus]
+        private Flag flush;
+
+        [OutputBus]
+        private IndexValue output;
+
+        public ShouldSave(IndexValue input, Flag flush, IndexValue output) {
+            this.input = input;
+            this.flush = flush;
+            this.output = output;
+        }
+
+        protected override void OnTick()
+        {
+            output.Ready = input.Ready && flush.flg;
+            if (input.Ready) {
+                output.Addr = input.Addr;
+            }
+        }
+    }
+
 
 
 

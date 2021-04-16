@@ -50,27 +50,73 @@ namespace Softplus
         public IndexControl control_out;
         public Soft_stage(IndexControl testcontrol, IndexControl control_in,SME.Components.SimpleDualPortMemory<double> ram_in ){
 
-            var soft_index = Scope.CreateBus<IndexValue>();
-            var pipeout_soft = Scope.CreateBus<IndexValue>();
+            // var soft_index = Scope.CreateBus<IndexValue>();
+            // var pipeout_soft = Scope.CreateBus<IndexValue>();
+            // var pipeout1_soft = Scope.CreateBus<IndexValue>();
+            // var pipeout2_soft = Scope.CreateBus<IndexValue>();
+            // var soft_result = Scope.CreateBus<ValueTransfer>();
+            
+            // control_out = Scope.CreateBus<IndexControl>();
+            
+            // ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+
+            // var generate_soft = new Generate(soft_index, ram_in.ReadControl);
+
+            // var soft_ind = new SigIndex(control_in, soft_index ,control_out,  testcontrol);
+            // var pipe_soft = new Pipe(soft_index, pipeout_soft);
+            // var softplus = new Softplus_1(ram_in.ReadResult,pipeout_soft, soft_result);
+            // var pipe1_soft = new Pipe(pipeout_soft, pipeout1_soft );
+
+            // var softplus_2 = new Softplus_2(ram_in.ReadResult,pipeout1_soft, soft_result);
+            // var pipe2_soft = new Pipe(pipeout1_soft, pipeout2_soft );
+
+            // var toram_soft = new ToRam(soft_result, pipeout2_soft, ram_out.WriteControl);
+
+
+
+            var soft_index_A = Scope.CreateBus<IndexValue>();
+            var flag_0 = Scope.CreateBus<Flag>();
+            var flag_1 = Scope.CreateBus<Flag>();
+            var flag_2 = Scope.CreateBus<Flag>();
+
+
+            var pipeout0_soft = Scope.CreateBus<IndexValue>();
             var pipeout1_soft = Scope.CreateBus<IndexValue>();
             var pipeout2_soft = Scope.CreateBus<IndexValue>();
-            var soft_result = Scope.CreateBus<ValueTransfer>();
-            
+
+            var soft_result_0 = Scope.CreateBus<ValueTransfer>();
+            var soft_result_1 = Scope.CreateBus<ValueTransfer>();
+            var soft_result_2 = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
-            
+            var pipe0_control = Scope.CreateBus<IndexControl>();
+            var pipe1_control = Scope.CreateBus<IndexControl>();
+            var pipe2_control = Scope.CreateBus<IndexControl>();
+
+            // Stage 0 - Generate addresses
+            var soft_ind = new SigIndex_flag(control_in, soft_index_A ,pipe0_control,  testcontrol, flag_0);
+
+            // Stage 1 - Read from RAM
+            var generate_soft = new Generate(soft_index_A, ram_in.ReadControl);
+            var pipe_soft = new Pipe(soft_index_A, pipeout0_soft);
+            var pipe_con1 = new Pipe_control(pipe0_control, pipe1_control);
+            var pipe_flag1 = new Pipe_flag(flag_0, flag_1);
+
+            //stage 2 - multiply
+            var soft2 = new Softplus_1(ram_in.ReadResult, pipeout0_soft, soft_result_0, flag_1);
+            var pipe_mul2 = new Pipe(pipeout0_soft, pipeout1_soft);
+            var pipe_con2 = new Pipe_control(pipe1_control, pipe2_control);
+            var pipe_flag2 = new Pipe_flag(flag_1, flag_2);
+
+            // Stage 3 - subtract
+            var soft1 = new Softplus_2(soft_result_0 ,pipeout1_soft, soft_result_1, flag_2);
+            var pipe_con3 = new Pipe_control(pipe2_control, control_out);
+            var should_save = new ShouldSave(pipeout1_soft, flag_2, pipeout2_soft);
+
+            // Stage 4 - Save to RAM
             ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            var toram_soft = new ToRam(soft_result_1, pipeout2_soft, ram_out.WriteControl);
 
-            var generate_soft = new Generate(soft_index, ram_in.ReadControl);
 
-            var soft_ind = new SigIndex(control_in, soft_index ,control_out,  testcontrol);
-            var pipe_soft = new Pipe(soft_index, pipeout_soft);
-            var softplus = new Softplus_1(ram_in.ReadResult,pipeout_soft, soft_result);
-            var pipe1_soft = new Pipe(pipeout_soft, pipeout1_soft );
-
-            var softplus_2 = new Softplus_2(ram_in.ReadResult,pipeout1_soft, soft_result);
-            var pipe2_soft = new Pipe(pipeout1_soft, pipeout2_soft );
-
-            var toram_soft = new ToRam(soft_result, pipeout2_soft, ram_out.WriteControl);
         }
     }
 }

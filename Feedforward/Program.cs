@@ -34,7 +34,7 @@ namespace Feedforward
                 var z_scale_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/z_scale.csv", 1, (int)Deflib.Parameters.num_networks);
                 var x_data = new LoadStage((int)Deflib.Parameters.Batchsize*(int)Deflib.Parameters.input_size, "../Data/x.csv", (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
 
-                var outsimtra = new OutputSim_T(W0_data.control, W0_data.output);
+                //var outsimtra = new OutputSim_T(W0_data.control, W0_data.output);
 
                 ////// SME ///////////////
                 var transpose = new Transpose.TransposeStage(W0_data.control, W0_data.output);
@@ -109,14 +109,17 @@ namespace Feedforward
                 //var outsimtra = new OutputSim(soft.control_out, soft.ram_out, Expec_val.soft_expected);
                 //var outsimtra = new OutputSim(rz.control_out, rz.ram_out, Expec_val.RZ_expected);
                 //var outsimtra = new OutputSim(clamp.control_out, clamp.ram_out, Expec_val.clamp_expected);
-                // var outsimtra = new OutputSim(mean.control_out, mean.ram_out, Expec_val.mean_expected);
+                var outsimtra = new OutputSim(mean.control_out, mean.ram_out, Expec_val.mean_expected);
 
                 
+                uint ticks = 0;
 
                 sim
+                    .AddTicker(_=> ticks++)
                     .BuildCSVFile()
                     .BuildGraph()
                     .Run();
+                    Console.WriteLine(ticks);
             }        
         }
     }

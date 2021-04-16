@@ -4,7 +4,6 @@ using System;
 
 namespace Mean
 {
-
     [ClockedProcess]
     public class Mean_count: SimpleProcess {
         [InputBus]
