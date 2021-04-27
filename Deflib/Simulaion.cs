@@ -4,31 +4,8 @@ using SME;
 namespace Deflib
 {
 
-        public class OutputSim_T : SimulationProcess{
-        [InputBus]
-        public IndexControl index;
-
-        private SME.Components.SimpleDualPortMemory<double> ram;
-
-        public OutputSim_T( IndexControl index, SME.Components.SimpleDualPortMemory<double> ram){
-            this.index = index;
-            this.ram = ram;
-        }
-
-        public override async System.Threading.Tasks.Task Run(){
-            await ClockAsync();
-            while (!index.Ready)
-                await ClockAsync();
-
-            await ClockAsync();
-
-            Simulation.Current.RequestStop();
-
-        }
-    }
-
-
-    public class OutputSim : SimulationProcess{
+    public class OutputSim : SimulationProcess
+    {
         [InputBus]
         public IndexControl index;
         [InputBus]
