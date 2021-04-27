@@ -126,8 +126,10 @@ namespace sum_lastaxis
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
+                        controlout.Dim = control.Dim;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
+                        controlout.OffsetC = controlA.OffsetC;
                         started = false;
                     }
                     else
