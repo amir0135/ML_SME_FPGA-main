@@ -75,7 +75,14 @@ namespace sum_lastaxis
 
             var generate_z_SLA = new Generate(SLA_z_index_A, ram_in.ReadControl);
 
-            var SLA_z_ind = new SLAIndex(control_in, SLA_z_index_A, SLA_z_index_B, control_out,  testcontrol);
+            var ctrl_pipe0 = Scope.CreateBus<IndexControl>();
+            var ctrl_pipe1 = Scope.CreateBus<IndexControl>();
+            var ctrl_pipe2 = Scope.CreateBus<IndexControl>();
+            var pipe_ctrl0 = new Pipe_control(ctrl_pipe0, ctrl_pipe1);
+            var pipe_ctrl1 = new Pipe_control(ctrl_pipe1, ctrl_pipe2);
+            var pipe_ctrl2 = new Pipe_control(ctrl_pipe2, control_out);
+
+            var SLA_z_ind = new SLAIndex(control_in, SLA_z_index_A, SLA_z_index_B, ctrl_pipe0, testcontrol);
             var pipe_z_SLA = new Pipe(SLA_z_index_B, pipeout_z_SLA);
             var SLA_z = new SumLastAxis(ram_in.ReadResult, pipeout_z_SLA, SLA_z_result);
             var pipe1_z_SLA = new Pipe(pipeout_z_SLA, pipeout1_z_SLA);
