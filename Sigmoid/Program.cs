@@ -92,6 +92,7 @@ namespace Sigmoid
 
             // Stage 4 - divide
             var sig3 = new Sigmoid_3(sig_result_1, pipeout2_sig, sig_result_2, flag_3);
+            var pipe_con4 = new Pipe_control(pipe3_control, control_out);
             var should_save = new ShouldSave(pipeout2_sig, flag_3, pipeout3_sig);
 
             // Stage 4 - Save to RAM
