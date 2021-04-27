@@ -25,13 +25,14 @@ namespace Deflib
         {
             this.control = control;
             this.Row = Row;
+            this.Col = 1;
+            this.Dim = 1;
         }
-
 
         public TestIndexSim(IndexControl control, int Row, int Col)
         {
             this.control = control;
-             this.Row = Row;
+            this.Row = Row;
             this.Col = Col;
             this.Dim = 1;
         }
