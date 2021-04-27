@@ -14,7 +14,9 @@ namespace Deflib
         private SME.Components.SimpleDualPortMemory<double> ram;
 
         private double[] expected;
-        public OutputSim( IndexControl index, SME.Components.SimpleDualPortMemory<double> ram, double[] expected){
+
+        public OutputSim(IndexControl index, SME.Components.SimpleDualPortMemory<double> ram, double[] expected)
+        {
             this.index = index;
             this.ram = ram;
             ignore = ram.ReadResult;
@@ -32,9 +34,11 @@ namespace Deflib
             for (int i = 0; i < expected.Length; i++)
             {
                 match = match && Math.Abs(ram.m_memory[i] - expected[i]) < 0.0000001;
+                if (!(Math.Abs(ram.m_memory[i] - expected[i]) < 0.0000001))
+                    Console.WriteLine($"{i} {ram.m_memory[i]} != {expected[i]}");
             }
-            System.Diagnostics.Debug.Assert(match,"expected did not match result");
-            Simulation.Current.RequestStop();
+
+            System.Diagnostics.Debug.Assert(match, "expected did not match result");
         }
     }
 

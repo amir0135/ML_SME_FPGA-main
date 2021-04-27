@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using SME;
 using Deflib;
 
@@ -30,7 +31,7 @@ namespace z_r
                 var wz_ready = new TestIndexSim(control_wz, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var z = new zStage(control_z, control_hz, control_wz, array_hz, array_wz);
 
-                var outsimtra = new OutputSim(z.control_out, z.ram_out, z_expected);
+                var outsim_z = new OutputSim(z.control_out, z.ram_out, z_expected);
 
                 ////// Test data r///////////////
                 var control_hr = Scope.CreateBus<IndexControl>();
@@ -51,12 +52,18 @@ namespace z_r
                 var wr_ready = new TestIndexSim(control_wr, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var r = new zStage(control_r, control_hr, control_wr, array_hr, array_wr);
 
-                //var outsimtra = new OutputSim(r.control_out, r.ram_out, r_expected);
+                var outsim_r = new OutputSim(r.control_out, r.ram_out, r_expected);
 
                 sim
                     .BuildCSVFile()
                     .BuildGraph()
-                    .Run();
+                    .Run(exitMethod:
+                        () =>
+                        {
+                            OutputSim[] procs = { outsim_z, outsim_r };
+                            return procs.All(x => ((IProcess)x).Finished().IsCompleted);
+                        }
+                    );
             }
         }
     }

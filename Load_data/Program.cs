@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using SME;
 using SME.Components;
 using Deflib;
@@ -20,12 +21,35 @@ namespace Load_data
                 var z_scale_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/z_scale.csv", 1, (int)Deflib.Parameters.num_networks);
                 var x_data = new LoadStage((int)Deflib.Parameters.Batchsize * (int)Deflib.Parameters.input_size, "../Data/x.csv", (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
 
-                var outsimtra = new OutputSim(Prelu_z_data.control, Prelu_z_data.output, Prelu_z_data.expected);
+                var outsim_w0 = new OutputSim(W0_data.control, W0_data.output, W0_data.expected);
+                var outsim_wr = new OutputSim(Wr_data.control, Wr_data.output, Wr_data.expected);
+                var outsim_wz = new OutputSim(Wz_data.control, Wz_data.output, Wz_data.expected);
+                var outsim_prelu_z = new OutputSim(Prelu_z_data.control, Prelu_z_data.output, Prelu_z_data.expected);
+                var outsim_Prelu_r = new OutputSim(Prelu_r_data.control, Prelu_r_data.output, Prelu_r_data.expected);
+                var outsim_z_scale = new OutputSim(z_scale_data.control, z_scale_data.output, z_scale_data.expected);
+                var outsim_x_data = new OutputSim(x_data.control, x_data.output, x_data.expected);
+
+
 
                 sim
                     .BuildCSVFile()
                     .BuildGraph()
-                    .Run();
+                    .Run(exitMethod:
+                        () =>
+                        {
+                            OutputSim[] procs =
+                                {
+                                    outsim_w0,
+                                    outsim_wr,
+                                    outsim_wz,
+                                    outsim_prelu_z,
+                                    outsim_Prelu_r,
+                                    outsim_z_scale,
+                                    outsim_x_data
+                                };
+                            return procs.All(x => ((IProcess)x).Finished().IsCompleted);
+                        }
+                        );
             }
         }
     }
@@ -62,6 +86,8 @@ namespace Load_data
             var load_sim = new TestIndexSim(load_control, row, col);
             var generate_load = new Dataload(size, CSVfile, load_index, output.WriteControl);
             var load_ind = new Index(load_control, load_index, control);
+
+            expected = generate_load.A;
         }
     }
 

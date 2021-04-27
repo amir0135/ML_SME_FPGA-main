@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using SME;
 using SME.Components;
 using Deflib;
@@ -38,7 +39,7 @@ namespace HzHr
                 var hz = new HzStage(control_Hz, control_matmul, control_prelu_z, array_matmul, array_prelu_z);
 
                 //test out simulation to see if SME match ML results
-                var outsimtra = new OutputSim(hz.control_out, hz.ram_out, hz_expected);
+                var outsim_hz = new OutputSim(hz.control_out, hz.ram_out, hz_expected);
 
                 ////// Test data Hr///////////////
                 var control_prelu_r = Scope.CreateBus<IndexControl>();
@@ -59,12 +60,17 @@ namespace HzHr
                 var hr = new HzStage(control_hr, control_matmul, control_prelu_r, array_matmul, array_prelu_r);
 
                 //test out simulation to see if SME match ML results
-                //var outsimtra = new OutputSim(hr.control_out, hr.ram_out, hr_expected);
+                var outsim_hr = new OutputSim(hr.control_out, hr.ram_out, hr_expected);
 
                 sim
                     .BuildCSVFile()
                     .BuildGraph()
-                    .Run();
+                    .Run(exitMethod: () =>
+                        {
+                            OutputSim[] procs = { outsim_hz, outsim_hr };
+                            return procs.All(x => ((IProcess)x).Finished().IsCompleted);
+                        }
+                    );
             }
         }
     }

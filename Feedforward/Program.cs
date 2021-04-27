@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using SME;
 using Deflib;
 using Transpose;
@@ -89,34 +90,51 @@ namespace Feedforward
                 var control_mean = Scope.CreateBus<IndexControl>();
                 var index_mean = new TestIndexSim(control_mean,1 ,(int)Deflib.Parameters.num_networks);
                 var mean = new Mean_Stage(control_mean, clamp.control_out, clamp.ram_out);
-                
 
+                var outsim_transpose = new OutputSim(transpose.control_out, transpose.ram_out, Expec_val.transpose_expected);
+                var outsim_matmul = new OutputSim(matmul.control_out, matmul.ram_out_1, Expec_val.matmul_expected);
+                var outsim_hz = new OutputSim(hz.control_out, hz.ram_out, Expec_val.hz_expected);
+                var outsim_z = new OutputSim(z.control_out, z.ram_out, Expec_val.z_expected);
+                var outsim_r = new OutputSim(r.control_out, r.ram_out, Expec_val.r_expected);
+                var outsim_slaz = new OutputSim(SLA_z.control_out, SLA_z.ram_out, Expec_val.SLA_z_expected);
+                var outsim_slar = new OutputSim(SLA_r.control_out, SLA_r.ram_out, Expec_val.SLA_r_expected);
+                var outsim_zz = new OutputSim(zz.control_out, zz.ram_out, Expec_val.zz_expected);
+                var outsim_sig = new OutputSim(sigmoid.control_out, sigmoid.ram_out,  Expec_val.sig_expected);
+                var outsim_mulmin = new OutputSim(mulmin.control_out, mulmin.ram_out, Expec_val.mulmin_expected);
+                var outsim_soft = new OutputSim(soft.control_out, soft.ram_out, Expec_val.soft_expected);
+                var outsim_rz = new OutputSim(rz.control_out, rz.ram_out, Expec_val.RZ_expected);
+                var outsim_clamp = new OutputSim(clamp.control_out, clamp.ram_out, Expec_val.clamp_expected);
+                var outsim_mean = new OutputSim(mean.control_out, mean.ram_out, Expec_val.mean_expected);
 
-
-                //var outsimtra = new OutputSim_T(transpose.control_out, transpose.ram_out, Expec_val.transpose_expected);
-                //var outsimtra = new OutputSim_T(matmul.control_out, matmul.ram_out_1, Expec_val.matmul_expected);
-                //var outsimtra = new OutputSim(hz.control_out, hz.ram_out, Expec_val.hz_expected);
-                //var outsimtra = new OutputSim_T(z.control_out, z.ram_out, Expec_val.z_expected);
-                //var outsimtra = new OutputSim_T(r.control_out, r.ram_out, Expec_val.r_expected);
-                // var outsimtra = new OutputSim(SLA_z.control_out, SLA_z.ram_out, Expec_val.SLA_z_expected);
-                // var outsimtra = new OutputSim(SLA_r.control_out, SLA_r.ram_out, Expec_val.SLA_r_expected);
-                //var outsimtra = new OutputSim(zz.control_out, zz.ram_out, Expec_val.zz_expected);
-                //var outsimtra = new OutputSim(sigmoid.control_out, sigmoid.ram_out,  Expec_val.sig_expected);
-                //var outsimtra = new OutputSim(mulmin.control_out, mulmin.ram_out, Expec_val.mulmin_expected);
-                //var outsimtra = new OutputSim(soft.control_out, soft.ram_out, Expec_val.soft_expected);
-                //var outsimtra = new OutputSim(rz.control_out, rz.ram_out, Expec_val.RZ_expected);
-                //var outsimtra = new OutputSim(clamp.control_out, clamp.ram_out, Expec_val.clamp_expected);
-                var outsimtra = new OutputSim(mean.control_out, mean.ram_out, Expec_val.mean_expected);
-
-                
                 uint ticks = 0;
 
                 sim
                     .AddTicker(_ => ticks++)
                     .BuildCSVFile()
                     .BuildGraph(render_buses:false)
-                    .Run();
-                    
+                    .Run(exitMethod: () =>
+                        {
+                            OutputSim[] procs =
+                            {
+                                outsim_transpose,
+                                outsim_matmul,
+                                outsim_hz,
+                                outsim_z,
+                                outsim_r,
+                                outsim_slaz,
+                                outsim_slar,
+                                outsim_zz,
+                                outsim_sig,
+                                outsim_mulmin,
+                                outsim_soft,
+                                outsim_rz,
+                                outsim_clamp,
+                                outsim_mean
+                            };
+                            return procs.All(x => ((IProcess)x).Finished().IsCompleted);
+                        }
+                    );
+
                 Console.WriteLine(ticks);
             }
         }
