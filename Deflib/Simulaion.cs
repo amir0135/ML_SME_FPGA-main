@@ -1,9 +1,5 @@
-
 using System;
 using SME;
-using System.Linq;
-using System.IO;
-using System.Globalization;
 
 namespace Deflib
 {
@@ -48,23 +44,21 @@ namespace Deflib
             this.expected = expected;
         }
 
-        public override async System.Threading.Tasks.Task Run(){
+        public override async System.Threading.Tasks.Task Run()
+        {
             await ClockAsync();
             while (!index.Ready)
                 await ClockAsync();
 
             await ClockAsync();
             var match = true;
-            for (int i =0; i<expected.Length; i++){
+            for (int i = 0; i < expected.Length; i++)
+            {
                 match = match && Math.Abs(ram.m_memory[i] - expected[i]) < 0.0000001;
             }
             System.Diagnostics.Debug.Assert(match,"expected did not match result");
             Simulation.Current.RequestStop();
-
         }
     }
-
-
-
 
 }

@@ -5,17 +5,15 @@ using System;
 namespace Clamp
 {
 
-
-   
     [ClockedProcess]
-    public class Clamp: SimpleProcess {
+    public class Clamp : SimpleProcess
+    {
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
 
         [InputBus]
         private IndexValue index;
 
-  
         [OutputBus]
         private ValueTransfer m_output;
 
@@ -31,20 +29,18 @@ namespace Clamp
             this.max_val = max_val ;
         }
 
-        protected override void OnTick(){
-
-                        if (index.Ready == true){
-                if (m_input.Data < min_val){
-                        m_output.value = min_val;
-                    }
-                else if (m_input.Data > max_val){
-                        m_output.value = max_val;
-                }
-                else{
+        protected override void OnTick()
+        {
+            if (index.Ready == true)
+            {
+                if (m_input.Data < min_val)
+                    m_output.value = min_val;
+                else if (m_input.Data > max_val)
+                    m_output.value = max_val;
+                else
                     m_output.value = m_input.Data;
-                }    
             }
-        }  
+        }
     }
-}    
 
+}

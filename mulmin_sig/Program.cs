@@ -1,23 +1,19 @@
 using System;
 using SME;
-using System.IO;
-using System.Linq;
-using System.Globalization;
 using Deflib;
 
 namespace mulmin_sig
-{       
+{
 
-    class MainClass{
+    class MainClass
+    {
         public static void Main(string[] args)
         {
             using (var sim = new Simulation())
             {
-
-
                 ////// Test data r///////////////
                 var control_sig = Scope.CreateBus<IndexControl>();
-                
+
                 var control_mulmin = Scope.CreateBus<IndexControl>();
 
                 var sig_data = Generate_mulmin.gen_sig();
@@ -25,36 +21,34 @@ namespace mulmin_sig
 
                 var mulmin_expected = Deflib.Functions.Flatten(Deflib.Generate_data.mulmin(sig_data));
 
-                var array_sigmoid = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks,sig_flat);  
+                var array_sigmoid = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, sig_flat);
 
                 var index_mulmin = new TestIndexSim(control_mulmin, 1, (int)Deflib.Parameters.num_networks);
                 var index_sig = new TestIndexSim(control_sig, 1, (int)Deflib.Parameters.num_networks);
-                
+
                 var mulmin = new minmul_Stage(control_mulmin, control_sig, array_sigmoid);
-                
+
                 var outsimtra = new OutputSim(mulmin.control_out, mulmin.ram_out, mulmin_expected);
 
                 sim
-
                     .BuildCSVFile()
                     .BuildGraph()
                     .Run();
-            }        
+            }
         }
+    }
 
-        }
-    public class minmul_Stage{
-
+    public class minmul_Stage
+    {
         public SME.Components.SimpleDualPortMemory<double> ram_out;
         public IndexControl control_out;
-        public minmul_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in ){
 
-
+        public minmul_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        {
             var mulmin_index_A = Scope.CreateBus<IndexValue>();
             var flag_0 = Scope.CreateBus<Flag>();
             var flag_1 = Scope.CreateBus<Flag>();
             var flag_2 = Scope.CreateBus<Flag>();
-
 
             var pipeout0_mulmin = Scope.CreateBus<IndexValue>();
             var pipeout1_mulmin = Scope.CreateBus<IndexValue>();
@@ -69,7 +63,7 @@ namespace mulmin_sig
             var pipe2_control = Scope.CreateBus<IndexControl>();
 
             // Stage 0 - Generate addresses
-            var mulmin_ind = new SigIndex_flag(control_in, mulmin_index_A ,pipe0_control,  testcontrol, flag_0);
+            var mulmin_ind = new SigIndex_flag(control_in, mulmin_index_A, pipe0_control, testcontrol, flag_0);
 
             // Stage 1 - Read from RAM
             var generate_mulmin = new Generate(mulmin_index_A, ram_in.ReadControl);
@@ -84,7 +78,7 @@ namespace mulmin_sig
             var pipe_flag2 = new Pipe_flag(flag_1, flag_2);
 
             // Stage 3 - subtract
-            var mulmin1 = new Mulmin_sub(mulmin_result_0 ,pipeout1_mulmin, mulmin_result_1, flag_2);
+            var mulmin1 = new Mulmin_sub(mulmin_result_0, pipeout1_mulmin, mulmin_result_1, flag_2);
             var pipe_con3 = new Pipe_control(pipe2_control, control_out);
             var should_save = new ShouldSave(pipeout1_mulmin, flag_2, pipeout2_mulmin);
 
@@ -93,4 +87,5 @@ namespace mulmin_sig
             var toram_mulmin = new ToRam(mulmin_result_1, pipeout2_mulmin, ram_out.WriteControl);
         }
     }
+
 }

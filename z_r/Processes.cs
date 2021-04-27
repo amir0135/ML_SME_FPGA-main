@@ -6,36 +6,29 @@ namespace z_r
 
     public class ZIndex : SimpleProcess
     {
-  
+        [InputBus]
+        private IndexControl control;
         [InputBus]
         private IndexControl controlA;
-
         [InputBus]
         private IndexControl controlB;
 
         [OutputBus]
         private IndexValue outputA;
-        
         [OutputBus]
         private IndexValue outputB;
-        
-        
         [OutputBus]
-
         private IndexControl controlout;
-        [InputBus]
-        private IndexControl control;
 
         private bool running = false;
         private int i, j, k = 0;
         private int Addr;
         private int width, height, dim;
-        private bool Aready = false, Bready =  false;
+        private bool Aready = false, Bready = false;
         private bool started = false;
 
-
         public ZIndex(IndexControl controlA, IndexControl controlB, IndexValue outputA, IndexValue outputB, IndexControl controlout, IndexControl control)
-        {   
+        {
             this.controlA = controlA;
             this.controlB = controlB;
             this.controlout = controlout;
@@ -44,18 +37,16 @@ namespace z_r
             this.control = control;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-            if (running == true) 
-            {   
+            if (running == true)
+            {
                 outputA.Ready = true;
                 outputB.Ready = true;
                 started = true;
 
-                
-                outputA.Addr =  i *width*height + j*width + k ;
-                outputB.Addr =  i *width*height + j*width + k ;
-                
+                outputA.Addr = i * width * height + j * width + k;
+                outputB.Addr = i * width * height + j * width + k;
 
                 k++;
 
@@ -68,15 +59,15 @@ namespace z_r
                 if (j >= height)
                 {
                     j = 0;
-                    i ++;
+                    i++;
                 }
 
                 if (i >= dim)
                 {
                     running = false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 Aready |= controlA.Ready;
                 Bready |= controlB.Ready;
@@ -100,28 +91,29 @@ namespace z_r
 
                     started = true;
                 }
-                
-
-               else {
-                    if (started == true){
-                        
+                else
+                {
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
                         controlout.Dim = control.Dim;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
-                        controlout.OffsetC = controlA.OffsetC;   
+                        controlout.OffsetC = controlA.OffsetC;
                         started = false;
                     }
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
-            
+
                     outputA.Ready = false;
                     outputB.Ready = false;
                 }
             }
-        }         
+        }
     }
-}    
+
+}

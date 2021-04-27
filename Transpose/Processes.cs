@@ -4,31 +4,26 @@ using Deflib;
 
 namespace Transpose
 {
-    
-  public class Transpose : SimpleProcess
+
+    public class Transpose : SimpleProcess
     {
         [InputBus]
         private IndexControl controlA;
-       
 
         [OutputBus]
         private IndexValue outputA;
-
         [OutputBus]
         private IndexValue outputB;
-        
         [OutputBus]
         private IndexControl controlout;
-
 
         private bool running = false;
         private int i, j = 0;
         private int Addr;
         private int width, height;
-    
-        private bool started = false; 
+        private bool started = false;
 
-        public Transpose(IndexControl controlA, IndexValue outputA,IndexValue outputB , IndexControl controlout)
+        public Transpose(IndexControl controlA, IndexValue outputA, IndexValue outputB, IndexControl controlout)
         {
             this.controlout = controlout;
             this.controlA = controlA;
@@ -36,15 +31,15 @@ namespace Transpose
             this.outputB = outputB;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-            if (running == true) 
+            if (running == true)
             {
                 started = true;
 
                 j++;
 
-                if (j>= height)
+                if (j >= height)
                 {
                     j = 0;
                     i++;
@@ -56,8 +51,8 @@ namespace Transpose
                 {
                     running = false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 if (controlA.Ready == true)
                 {
@@ -65,38 +60,35 @@ namespace Transpose
                     running = true;
                     width = controlA.Width;
                     height = controlA.Height;
-                    i = j =  0;
-
+                    i = j = 0;
 
                     outputA.Ready = true;
-                    outputA.Addr = controlA.OffsetA;;
+                    outputA.Addr = controlA.OffsetA; ;
 
                     outputB.Ready = true;
                     outputB.Addr = controlA.OffsetB;
                 }
-                else {
-                    if (started == true){
+                else
+                {
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = controlA.Height;
                         controlout.Width = controlA.Width;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
-                        started = false;                            
+                        started = false;
                     }
-
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
-                    
+
                     outputA.Ready = false;
                     outputB.Ready = false;
                 }
             }
-        }         
+        }
     }
 
-
-
-
-}    
-
+}

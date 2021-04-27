@@ -9,12 +9,11 @@ using System;
 namespace Deflib
 {
 
-
- // Forms the data into 1,2 or 3D
- // input: takes ind the dimensions of data
- // output: indexcontrol that makes sure to hold the size
-
-  public class TestIndexSim : SimulationProcess{
+    // Forms the data into 1,2 or 3D
+    // input: takes ind the dimensions of data
+    // output: indexcontrol that makes sure to hold the size
+    public class TestIndexSim : SimulationProcess
+    {
         [OutputBus]
         private IndexControl control;
 
@@ -45,7 +44,6 @@ namespace Deflib
             this.Dim = Dim;
         }
 
-
         public override async Task Run()
         {
             control.OffsetA = 0;
@@ -55,141 +53,117 @@ namespace Deflib
             await ClockAsync();
 
             control.Ready = true;
-
             control.Height = Row;
             control.Width = Col;
-            control.Dim = Dim ;
+            control.Dim = Dim;
 
             await ClockAsync();
 
             control.Ready = false;
-
-
-
-
-
         }
     }
 
-
-     public class Dataload : SimulationProcess{
-        [OutputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IWriteControl output;
-
-
+    public class Dataload : SimulationProcess
+    {
         [InputBus]
         private IndexValue index;
 
+        [OutputBus]
+        private SME.Components.SimpleDualPortMemory<double>.IWriteControl output;
+
         int size;
         string CSVfile;
+        public double[] A;
 
-        private float[] A;
         public Dataload(int size, string CSVfile, IndexValue value, SME.Components.SimpleDualPortMemory<double>.IWriteControl output)
-        {   
+        {
             this.size = size;
             this.CSVfile = CSVfile;
-            index = value; 
+            index = value;
             this.output = output;
 
             A = File.ReadAllLines(CSVfile)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => float.Parse(x.Trim(), CultureInfo.InvariantCulture))
+                .Select(x => double.Parse(x.Trim(), CultureInfo.InvariantCulture))
                 .ToArray();
         }
 
-
-       public override async System.Threading.Tasks.Task Run(){
-            while(true){
+        public override async System.Threading.Tasks.Task Run()
+        {
+            while (true)
+            {
                 await ClockAsync();
 
                 output.Enabled = index.Ready;
 
-                if (index.Ready){
-                output.Address = index.Addr;
-                output.Data  = A[index.Addr] ;
-
-                }     
+                if (index.Ready)
+                {
+                    output.Address = index.Addr;
+                    output.Data = A[index.Addr];
+                }
             }
-        }        
+        }
     }
-    
-
-
 
     [ClockedProcess]
     public class Mul : SimpleProcess
     {
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputA;
-
-
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputB;
-
-
-        
         [InputBus]
         private IndexValue input_pipe;
 
         [OutputBus]
         private ValueTransfer v_output;
 
-     
-        public Mul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB,  ValueTransfer output)
+        public Mul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, ValueTransfer output)
         {
-
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputA = inputA ?? throw new ArgumentNullException(nameof(inputA));
             m_inputB = inputB ?? throw new ArgumentNullException(nameof(inputB));
             v_output = output ?? throw new ArgumentNullException(nameof(output));
-
         }
 
-        protected override void OnTick(){
-        
-            if (input_pipe.Ready == true){
-
-                    v_output.value =  m_inputA.Data * m_inputB.Data;
-
+        protected override void OnTick()
+        {
+            if (input_pipe.Ready == true)
+            {
+                v_output.value = m_inputA.Data * m_inputB.Data;
             }
-            else{
+            else
+            {
                 v_output.value = 0;
             }
-
         }
-
     }
+
     public class MulIndex : SimpleProcess
     {
-  
+        [InputBus]
+        private IndexControl control;
         [InputBus]
         private IndexControl controlA;
-
         [InputBus]
         private IndexControl controlB;
 
         [OutputBus]
         private IndexValue outputA;
-        
         [OutputBus]
         private IndexValue outputB;
-        
         [OutputBus]
-
         private IndexControl controlout;
-        [InputBus]
-        private IndexControl control;
 
         private bool running = false;
         private int i, j, k = 0;
         private int Addr;
         private int width, height;
-        private bool Aready = false, Bready =  false;
+        private bool Aready = false, Bready = false;
         private bool started = false;
 
-
         public MulIndex(IndexControl controlA, IndexControl controlB, IndexValue outputA, IndexValue outputB, IndexControl controlout, IndexControl control)
-        {   
+        {
             this.controlA = controlA;
             this.controlB = controlB;
             this.controlout = controlout;
@@ -198,32 +172,31 @@ namespace Deflib
             this.control = control;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-            if (running == true) 
-            {   
+            if (running == true)
+            {
                 outputA.Ready = true;
                 outputB.Ready = true;
                 started = true;
 
-                
-                outputA.Addr = i*width*height + j;
-                outputB.Addr  = i*width*height + j;
+                outputA.Addr = i * width * height + j;
+                outputB.Addr = i * width * height + j;
 
                 j++;
 
                 if (j >= width)
                 {
                     j = 0;
-                    i ++;
+                    i++;
                 }
 
                 if (i >= height)
                 {
                     running = false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 Aready |= controlA.Ready;
                 Bready |= controlB.Ready;
@@ -245,11 +218,10 @@ namespace Deflib
 
                     started = true;
                 }
-                
-
-               else {
-                    if (started == true){
-                        
+                else
+                {
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
@@ -259,30 +231,29 @@ namespace Deflib
                         controlout.Dim = controlA.Dim;
                         started = false;
                     }
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
-            
+
                     outputA.Ready = false;
                     outputB.Ready = false;
                 }
             }
-        }         
+        }
     }
 
     public class SigIndex : SimpleProcess
     {
-  
+        [InputBus]
+        private IndexControl control;
         [InputBus]
         private IndexControl controlA;
 
         [OutputBus]
         private IndexValue output;
         [OutputBus]
-
         private IndexControl controlout;
-        [InputBus]
-        private IndexControl control;
 
         private bool running = false;
         private int i = 0;
@@ -291,24 +262,22 @@ namespace Deflib
         private bool Aready = false;
         private bool started = false;
 
-
         public SigIndex(IndexControl controlA, IndexValue output, IndexControl controlout, IndexControl control)
-        {   
+        {
             this.controlA = controlA;
             this.controlout = controlout;
             this.output = output;
             this.control = control;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-        if (running == true) 
-            {   
+            if (running == true)
+            {
                 started = true;
                 output.Ready = true;
-                
-                output.Addr =  i ;
 
+                output.Addr = i;
 
                 i++;
 
@@ -316,9 +285,8 @@ namespace Deflib
                 {
                     running = false;
                 }
-            } 
-        
-            else 
+            }
+            else
             {
                 Aready |= controlA.Ready;
 
@@ -335,42 +303,43 @@ namespace Deflib
                     output.Addr = controlA.OffsetA;
                     started = true;
                 }
-                
-
-               else {
-                    if (started == true){
-                        
+                else
+                {
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
+                        controlout.Dim = control.Dim;
                         controlout.OffsetA = controlA.OffsetA;
                         controlout.OffsetB = controlA.OffsetB;
+                        controlout.OffsetC = controlA.OffsetC;
                         started = false;
                     }
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
-            
                     output.Ready = false;
                 }
             }
-        }         
+        }
     }
 
-
-
-   public class SigIndex_flag : SimpleProcess
+    public class SigIndex_flag : SimpleProcess
     {
         [InputBus]
         private IndexControl controlA;
+        [InputBus]
+        private IndexControl control;
+
         [OutputBus]
         private IndexValue output;
         [OutputBus]
         private IndexControl controlout;
-        [InputBus]
-        private IndexControl control;
         [OutputBus]
         private Flag flush;
+
         private bool running = false;
         private int i = 0;
         private int Addr;
@@ -378,9 +347,8 @@ namespace Deflib
         private bool Aready = false;
         private bool started = false;
 
-
         public SigIndex_flag(IndexControl controlA, IndexValue output, IndexControl controlout, IndexControl control, Flag flush)
-        {   
+        {
             this.controlA = controlA;
             this.controlout = controlout;
             this.output = output;
@@ -388,15 +356,15 @@ namespace Deflib
             this.flush = flush;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-        flush.flg = false;
-        if (running == true) 
-            {   
+            flush.flg = false;
+            if (running == true)
+            {
                 started = true;
                 output.Ready = true;
-                
-                output.Addr =  i ;
+
+                output.Addr = i;
                 i++;
                 flush.flg = true;
 
@@ -404,9 +372,8 @@ namespace Deflib
                 {
                     running = false;
                 }
-            } 
-        
-            else 
+            }
+            else
             {
                 Aready |= controlA.Ready;
 
@@ -423,11 +390,10 @@ namespace Deflib
                     output.Addr = controlA.OffsetA;
                     started = true;
                 }
-                
-
-               else {
-                    if (started == true){
-                        
+                else
+                {
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
@@ -437,14 +403,14 @@ namespace Deflib
                         controlout.Dim = controlA.Dim;
                         started = false;
                     }
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
-            
                     output.Ready = false;
                 }
             }
-        }         
+        }
     }
 
 }

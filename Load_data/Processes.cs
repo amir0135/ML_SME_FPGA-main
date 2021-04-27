@@ -1,15 +1,14 @@
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using SME;
 using Deflib;
 
 namespace Load_data
 {
 
-    public class Index : SimpleProcess{
+    public class Index : SimpleProcess
+    {
         [InputBus]
         private IndexControl control;
+
         [OutputBus]
         private IndexValue output;
         [OutputBus]
@@ -30,23 +29,22 @@ namespace Load_data
             this.controlout = controlout;
         }
 
-        protected override void OnTick() 
+        protected override void OnTick()
         {
-            if (running == true) 
-            {   
+            if (running == true)
+            {
                 started = true;
 
                 i++;
-                output.Addr = i ;
-                
+                output.Addr = i;
 
                 if (i >= width*height*dim)
                 {
                     running = false;
                     output.Ready = false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 if (control.Ready == true)
                 {
@@ -60,29 +58,28 @@ namespace Load_data
 
                     output.Ready = true;
                     output.Addr = Addr;
-
                 }
-                else 
+                else
                 {
-                    if (started == true){
+                    if (started == true)
+                    {
                         controlout.Ready = true;
                         controlout.Height = control.Height;
                         controlout.Width = control.Width;
                         controlout.Dim = control.Dim;
                         controlout.OffsetA = control.OffsetA;
                         controlout.OffsetB = control.OffsetB;
-                        controlout.OffsetC = control.OffsetC;   
+                        controlout.OffsetC = control.OffsetC;
                         started = false;
                     }
-                    
-                    else{
+                    else
+                    {
                         controlout.Ready = false;
                     }
                     output.Ready = false;
-                    
                 }
             }
-        }         
+        }
     }
 
 }

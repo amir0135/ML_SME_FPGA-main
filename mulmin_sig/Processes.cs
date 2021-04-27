@@ -5,23 +5,20 @@ using System;
 namespace mulmin_sig
 {
 
-    
     [ClockedProcess]
-    public class Mulmin_mul: SimpleProcess {
+    public class Mulmin_mul : SimpleProcess
+    {
         [InputBus]
         private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
-
         [InputBus]
         private IndexValue index;
-  
-        [OutputBus]
-        private ValueTransfer m_output;
-        
         [InputBus]
         private Flag flush;
 
+        [OutputBus]
+        private ValueTransfer m_output;
 
-        public Mulmin_mul(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index,  ValueTransfer output, Flag flush)
+        public Mulmin_mul(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
@@ -29,34 +26,32 @@ namespace mulmin_sig
             this.flush = flush ?? throw new ArgumentNullException(nameof(flush));
         }
 
-        protected override void OnTick(){
-
-            if (index.Ready){
-                if (flush.flg) {
-                    m_output.value = 2* m_input.Data ;
-                }    
-
+        protected override void OnTick()
+        {
+            if (index.Ready)
+            {
+                if (flush.flg)
+                {
+                    m_output.value = 2 * m_input.Data;
+                }
             }
-        }  
+        }
     }
-
 
     [ClockedProcess]
-    public class Mulmin_sub: SimpleProcess {
+    public class Mulmin_sub : SimpleProcess
+    {
         [InputBus]
         private ValueTransfer m_input;
-
         [InputBus]
         private IndexValue index;
-
         [InputBus]
         private Flag flush;
-  
+
         [OutputBus]
         private ValueTransfer m_output;
 
-
-        public Mulmin_sub(ValueTransfer input, IndexValue index,  ValueTransfer output,Flag flush)
+        public Mulmin_sub(ValueTransfer input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
@@ -64,20 +59,16 @@ namespace mulmin_sig
             this.flush = flush ?? throw new ArgumentNullException(nameof(flush));
         }
 
-        protected override void OnTick(){
-
-            if (index.Ready){
-                if (flush.flg) {
+        protected override void OnTick()
+        {
+            if (index.Ready)
+            {
+                if (flush.flg)
+                {
                     m_output.value = m_input.value - 1;
-                }    
-
+                }
             }
-        }  
+        }
     }
 
-}   
-
-
-
-
-
+}
