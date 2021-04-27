@@ -81,8 +81,8 @@ namespace Feedforward
 
                 var control_rz = Scope.CreateBus<IndexControl>();
                 var index_rz = new TestIndexSim(control_rz, 1, (int)Deflib.Parameters.num_networks);
-                var rz = new RZStage(control_rz, sigmoid.control_out, soft.control_out, sigmoid.ram_out, soft.ram_out);
-                
+                var rz = new RZStage(control_rz, mulmin.control_out, soft.control_out, mulmin.ram_out, soft.ram_out);
+
                 var control_clamp = Scope.CreateBus<IndexControl>();
                 var index_clamp = new TestIndexSim(control_clamp, 1, (int)Deflib.Parameters.num_networks);
                 var clamp = new Clamp_Stage(control_clamp, rz.control_out, rz.ram_out, -(int)Deflib.Parameters.max_predict, (int)Deflib.Parameters.max_predict);
