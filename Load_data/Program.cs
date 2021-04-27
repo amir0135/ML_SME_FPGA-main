@@ -20,7 +20,7 @@ namespace Load_data
                 var z_scale_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/z_scale.csv", 1, (int)Deflib.Parameters.num_networks);
                 var x_data = new LoadStage((int)Deflib.Parameters.Batchsize * (int)Deflib.Parameters.input_size, "../Data/x.csv", (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
 
-                var outsimtra = new OutputSim_T(Prelu_z_data.control, Prelu_z_data.output);
+                var outsimtra = new OutputSim(Prelu_z_data.control, Prelu_z_data.output, Prelu_z_data.expected);
 
                 sim
                     .BuildCSVFile()
@@ -34,7 +34,8 @@ namespace Load_data
     {
         public SimpleDualPortMemory<double> output;
         public IndexControl control;
-        
+        public double[] expected;
+
         public LoadStage(int size, string CSVfile, int row)
         {
             var load_control = Scope.CreateBus<IndexControl>();
@@ -47,6 +48,7 @@ namespace Load_data
             var generate_load = new Dataload(size, CSVfile, load_index, output.WriteControl);
             var load_ind = new Index(load_control, load_index, control);
 
+            expected = generate_load.A;
         }
 
         public LoadStage(int size, string CSVfile, int row, int col)
