@@ -36,6 +36,7 @@ namespace Feedforward
         public static double[] transpose_expected = Deflib.Functions.Flatten(Transpose.Generate_data.transpose());
         public static double[] matmul_expected = Deflib.Functions.Flatten(Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0));
         public static double[] hz_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item1);
+        public static double[] hr_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item2);
         public static double[] z_expected = Deflib.Functions.Flatten(Deflib.Generate_data.z_r(hz_data.Item1, hz_data.Item2).Item1);
         public static double[] r_expected = Deflib.Functions.Flatten(Deflib.Generate_data.z_r(hr_data.Item1, hr_data.Item2).Item2);
         public static double[] SLA_z_expected = Deflib.Functions.Flatten(Deflib.Generate_data.gen_SLA(z_data.Item1,z_data.Item2).Item1);

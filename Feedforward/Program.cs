@@ -94,6 +94,7 @@ namespace Feedforward
                 var outsim_transpose = new OutputSim(transpose.control_out, transpose.ram_out, Expec_val.transpose_expected);
                 var outsim_matmul = new OutputSim(matmul.control_out, matmul.ram_out_1, Expec_val.matmul_expected);
                 var outsim_hz = new OutputSim(hz.control_out, hz.ram_out, Expec_val.hz_expected);
+                var outsim_hr = new OutputSim(hr.control_out, hr.ram_out, Expec_val.hr_expected);
                 var outsim_z = new OutputSim(z.control_out, z.ram_out, Expec_val.z_expected);
                 var outsim_r = new OutputSim(r.control_out, r.ram_out, Expec_val.r_expected);
                 var outsim_slaz = new OutputSim(SLA_z.control_out, SLA_z.ram_out, Expec_val.SLA_z_expected);
@@ -119,6 +120,7 @@ namespace Feedforward
                                 outsim_transpose,
                                 outsim_matmul,
                                 outsim_hz,
+                                outsim_hr,
                                 outsim_z,
                                 outsim_r,
                                 outsim_slaz,

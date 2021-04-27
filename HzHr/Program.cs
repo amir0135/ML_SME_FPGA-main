@@ -50,7 +50,7 @@ namespace HzHr
                 var array_prelu_r = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, Deflib.data.prelu_r_slopes);
 
                 //generate expected data
-                var hr_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item1);
+                var hr_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item2);
 
                 //sizes of matrices used
                 var index_hr = new TestIndexSim(control_hr, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size, 1);
