@@ -43,13 +43,9 @@ namespace Deflib
         bool Ready { get; set; }
         int Width { get; set; }
         int Height { get; set; }
-        [InitialValue(0)]
         int Dim { get; set; }
-        [InitialValue(0)]
         int OffsetA { get; set; }
-        [InitialValue(0)]
         int OffsetB { get; set; }
-        [InitialValue(0)]
         int OffsetC { get; set; }
     }
 
