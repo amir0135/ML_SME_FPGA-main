@@ -8,9 +8,9 @@ namespace Deflib
 
     public enum Parameters : int
     {
-        input_size = 4,
-        hidden_size = 7,
-        num_networks = 5,
+        input_size = 256,
+        hidden_size = 96,
+        num_networks = 16,
         max_predict = 1,
         Batchsize = 1
     };
