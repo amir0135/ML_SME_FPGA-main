@@ -6,7 +6,7 @@ namespace RZ
 
     public class Generate_rz
     {
-        public static Tuple<double[,], double[,]> gen_soft_mulmin()
+        public static Tuple<float[,], float[,]> gen_soft_mulmin()
         {
             //making softplus function
             var matmul = Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0);
@@ -21,7 +21,7 @@ namespace RZ
             var sig = Deflib.Generate_data.sig(zz);
             var mulmin = Deflib.Generate_data.mulmin(sig);
 
-            return new Tuple<double[,], double[,]>(soft, mulmin);
+            return new Tuple<float[,], float[,]>(soft, mulmin);
         }
     }
 

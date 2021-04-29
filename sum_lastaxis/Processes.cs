@@ -9,17 +9,17 @@ namespace sum_lastaxis
     public class SumLastAxis : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
         [InputBus]
         private IndexValue index;
 
         [OutputBus]
         private ValueTransfer m_output;
 
-        private double accumulated;
+        private float accumulated;
         private int ind = -1;
 
-        public SumLastAxis(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output)
+        public SumLastAxis(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));

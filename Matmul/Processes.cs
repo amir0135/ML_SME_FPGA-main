@@ -10,14 +10,14 @@ namespace Matmul
         [InputBus]
         private ValueTransfer m_inputAB;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputC;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputC;
         [InputBus]
         private IndexValue input_pipe;
 
         [OutputBus]
         private ValueTransfer v_output;
 
-        public MatMul_add(IndexValue inputpipe, ValueTransfer inputAB, SME.Components.SimpleDualPortMemory<double>.IReadResult inputC, ValueTransfer output)
+        public MatMul_add(IndexValue inputpipe, ValueTransfer inputAB, SME.Components.SimpleDualPortMemory<float>.IReadResult inputC, ValueTransfer output)
         {
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputAB = inputAB ?? throw new ArgumentNullException(nameof(inputAB));
@@ -42,16 +42,16 @@ namespace Matmul
     public class MatMul : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputA;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputA;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputB;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputB;
         [InputBus]
         private IndexValue input_pipe;
 
         [OutputBus]
         private ValueTransfer v_output;
 
-        public MatMul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, ValueTransfer output)
+        public MatMul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<float>.IReadResult inputA, SME.Components.SimpleDualPortMemory<float>.IReadResult inputB, ValueTransfer output)
         {
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputA = inputA ?? throw new ArgumentNullException(nameof(inputA));
@@ -197,12 +197,12 @@ namespace Matmul
         [InputBus]
         private ValueTransfer v_inputNew;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult v_inputOld;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult v_inputOld;
 
         [OutputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult v_output;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult v_output;
 
-        public Forward(IndexValue old_input, IndexValue new_input, ValueTransfer v_inputNew, SME.Components.SimpleDualPortMemory<double>.IReadResult v_inputOld, SME.Components.SimpleDualPortMemory<double>.IReadResult v_output)
+        public Forward(IndexValue old_input, IndexValue new_input, ValueTransfer v_inputNew, SME.Components.SimpleDualPortMemory<float>.IReadResult v_inputOld, SME.Components.SimpleDualPortMemory<float>.IReadResult v_output)
         {
             this.old_input = old_input;
             this.new_input = new_input;

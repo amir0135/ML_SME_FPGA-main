@@ -56,9 +56,9 @@ namespace Load_data
 
     public class LoadStage
     {
-        public SimpleDualPortMemory<double> output;
+        public SimpleDualPortMemory<float> output;
         public IndexControl control;
-        public double[] expected;
+        public float[] expected;
 
         public LoadStage(int size, string CSVfile, int row)
         {
@@ -66,7 +66,7 @@ namespace Load_data
             var load_index = Scope.CreateBus<IndexValue>();
             control = Scope.CreateBus<IndexControl>();
 
-            output = new SimpleDualPortMemory<double>(size);
+            output = new SimpleDualPortMemory<float>(size);
 
             var load_sim = new TestIndexSim(load_control, row);
             var generate_load = new Dataload(size, CSVfile, load_index, output.WriteControl);
@@ -81,7 +81,7 @@ namespace Load_data
             var load_index = Scope.CreateBus<IndexValue>();
             control = Scope.CreateBus<IndexControl>();
 
-            output = new SimpleDualPortMemory<double>(size);
+            output = new SimpleDualPortMemory<float>(size);
 
             var load_sim = new TestIndexSim(load_control, row, col);
             var generate_load = new Dataload(size, CSVfile, load_index, output.WriteControl);

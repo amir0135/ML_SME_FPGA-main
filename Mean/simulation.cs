@@ -6,7 +6,7 @@ namespace Mean
 
     public class Generate_clamp
     {
-        public static double[,] gen_clamp()
+        public static float[,] gen_clamp()
         {
             //making softplus function
             var matmul = Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0);

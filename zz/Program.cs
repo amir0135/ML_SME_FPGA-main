@@ -21,8 +21,8 @@ namespace zz
 
                 var zz_expected = Deflib.Functions.Flatten(Deflib.Generate_data.zz(SLA_data.Item1));
 
-                var array_zscale = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, Deflib.data.z_scale);
-                var array_SLA = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, SLA_flat);
+                var array_zscale = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, Deflib.data.z_scale);
+                var array_SLA = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, SLA_flat);
 
                 //size of output array
                 var index_zz = new TestIndexSim(control_zz, 1, (int)Deflib.Parameters.num_networks);
@@ -45,10 +45,10 @@ namespace zz
 
     public class zz_Stage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public zz_Stage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SME.Components.SimpleDualPortMemory<double> ramA_in, SME.Components.SimpleDualPortMemory<double> ramB_in)
+        public zz_Stage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SME.Components.SimpleDualPortMemory<float> ramA_in, SME.Components.SimpleDualPortMemory<float> ramB_in)
         {
             var zz_index_A = Scope.CreateBus<IndexValue>();
             var zz_index_B = Scope.CreateBus<IndexValue>();
@@ -59,7 +59,7 @@ namespace zz
 
             control_out = Scope.CreateBus<IndexControl>();
 
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks);
 
             var generate_zz_A = new Generate(zz_index_A, ramA_in.ReadControl);
             var generate_zz_B = new Generate(zz_index_B, ramB_in.ReadControl);

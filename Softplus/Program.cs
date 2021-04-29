@@ -24,7 +24,7 @@ namespace Softplus
 
                 var soft_expected = Deflib.Functions.Flatten(Deflib.Generate_data.soft(sla_r_data));
 
-                var array_r = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, sla_flat);
+                var array_r = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, sla_flat);
                 var index_soft = new TestIndexSim(control_soft, 1, (int)Deflib.Parameters.num_networks);
                 var index_r = new TestIndexSim(control_r, 1, (int)Deflib.Parameters.num_networks, 1);
 
@@ -42,10 +42,10 @@ namespace Softplus
 
     public class Soft_stage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public Soft_stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        public Soft_stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<float> ram_in)
         {
             var soft_index_A = Scope.CreateBus<IndexValue>();
             var flag_0 = Scope.CreateBus<Flag>();
@@ -85,7 +85,7 @@ namespace Softplus
             var should_save = new ShouldSave(pipeout1_soft, flag_2, pipeout2_soft);
 
             // Stage 4 - Save to RAM
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks);
             var toram_soft = new ToRam(soft_result_1, pipeout2_soft, ram_out.WriteControl);
         }
     }

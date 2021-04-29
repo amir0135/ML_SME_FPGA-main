@@ -9,7 +9,7 @@ namespace Sigmoid
     public class Sigmoid_1 : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
         [InputBus]
         private IndexValue index;
         [InputBus]
@@ -18,7 +18,7 @@ namespace Sigmoid
         [OutputBus]
         private ValueTransfer m_output;
 
-        public Sigmoid_1(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
+        public Sigmoid_1(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
@@ -32,7 +32,7 @@ namespace Sigmoid
             {
                 if (flush.flg)
                 {
-                    m_output.value = Math.Exp(-(m_input.Data));
+                    m_output.value = (float)Math.Exp(-(m_input.Data));
                 }
             }
         }

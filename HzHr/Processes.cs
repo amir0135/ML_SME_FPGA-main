@@ -9,16 +9,16 @@ namespace HzHr
     public class Hz : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputA;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputA;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputB;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputB;
         [InputBus]
         private IndexValue input_pipe;
 
         [OutputBus]
         private ValueTransfer v_output;
 
-        public Hz(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, ValueTransfer output)
+        public Hz(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<float>.IReadResult inputA, SME.Components.SimpleDualPortMemory<float>.IReadResult inputB, ValueTransfer output)
         {
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputA = inputA ?? throw new ArgumentNullException(nameof(inputA));

@@ -22,7 +22,7 @@ namespace Clamp
 
                 var clamp_expected = Deflib.Functions.Flatten(Deflib.Generate_data.clamp(rz_data));
 
-                var array_rz = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, rz_flat);
+                var array_rz = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, rz_flat);
 
                 var index_rz = new TestIndexSim(control_rz, 1, (int)Deflib.Parameters.num_networks);
                 var index_clamp = new TestIndexSim(control_clamp, 1, (int)Deflib.Parameters.num_networks);
@@ -41,10 +41,10 @@ namespace Clamp
 
     public class Clamp_Stage
     {
-        public SimpleDualPortMemory<double> ram_out;
+        public SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public Clamp_Stage(IndexControl testcontrol, IndexControl control_in, SimpleDualPortMemory<double> ram_in, int min, int max)
+        public Clamp_Stage(IndexControl testcontrol, IndexControl control_in, SimpleDualPortMemory<float> ram_in, int min, int max)
         {
             var clamp_index = Scope.CreateBus<IndexValue>();
             var pipeout_clamp = Scope.CreateBus<IndexValue>();
@@ -53,7 +53,7 @@ namespace Clamp
 
             control_out = Scope.CreateBus<IndexControl>();
 
-            ram_out = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            ram_out = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks);
 
             var generate_clamp = new Generate(clamp_index, ram_in.ReadControl);
 

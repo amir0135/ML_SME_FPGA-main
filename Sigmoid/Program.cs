@@ -21,7 +21,7 @@ namespace Sigmoid
 
                 var sig_expected = Deflib.Functions.Flatten(Deflib.Generate_data.sig(zz_data));
 
-                var array_zz = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, zz_flat);
+                var array_zz = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, zz_flat);
 
                 var index_sig = new TestIndexSim(control_sig, 1, (int)Deflib.Parameters.num_networks);
                 var index_zz = new TestIndexSim(control_zz, 1, (int)Deflib.Parameters.num_networks);
@@ -41,9 +41,9 @@ namespace Sigmoid
     public class Sig_Stage
     {
 
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
-        public Sig_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        public Sig_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<float> ram_in)
         {
             var sig_index_A = Scope.CreateBus<IndexValue>();
             var flag_0 = Scope.CreateBus<Flag>();
@@ -96,7 +96,7 @@ namespace Sigmoid
             var should_save = new ShouldSave(pipeout2_sig, flag_3, pipeout3_sig);
 
             // Stage 4 - Save to RAM
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks);
             var toram_sig = new ToRam(sig_result_2, pipeout3_sig, ram_out.WriteControl);
         }
     }

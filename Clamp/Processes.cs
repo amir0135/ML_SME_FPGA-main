@@ -9,7 +9,7 @@ namespace Clamp
     public class Clamp : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
 
         [InputBus]
         private IndexValue index;
@@ -17,10 +17,10 @@ namespace Clamp
         [OutputBus]
         private ValueTransfer m_output;
 
-        double min_val, max_val;
+        float min_val, max_val;
 
 
-        public Clamp(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index,  ValueTransfer output, double min_val, double max_val)
+        public Clamp(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index,  ValueTransfer output, float min_val, float max_val)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));

@@ -6,7 +6,7 @@ namespace Softplus
 
     public class Generate_soft
     {
-        public static double[,] gen_sla()
+        public static float[,] gen_sla()
         {
             var matmul = Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0);
             var hz_hr = Deflib.Generate_data.generate_hz(matmul, Deflib.dataMatrix.x);

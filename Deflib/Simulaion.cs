@@ -9,13 +9,13 @@ namespace Deflib
         [InputBus]
         public IndexControl index;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult ignore;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult ignore;
 
-        private SME.Components.SimpleDualPortMemory<double> ram;
+        private SME.Components.SimpleDualPortMemory<float> ram;
 
-        private double[] expected;
+        private float[] expected;
 
-        public OutputSim(IndexControl index, SME.Components.SimpleDualPortMemory<double> ram, double[] expected)
+        public OutputSim(IndexControl index, SME.Components.SimpleDualPortMemory<float> ram, float[] expected)
         {
             this.index = index;
             this.ram = ram;

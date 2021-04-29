@@ -9,7 +9,7 @@ namespace Softplus
     public class Softplus_1 : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
         [InputBus]
         private IndexValue index;
         [InputBus]
@@ -20,7 +20,7 @@ namespace Softplus
 
         private int threshold = 20;
 
-        public Softplus_1(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
+        public Softplus_1(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));
@@ -32,7 +32,7 @@ namespace Softplus
         {
             if (index.Ready == true)
             {
-                m_output.value = Math.Exp(m_input.Data);
+                m_output.value = (float)Math.Exp(m_input.Data);
             }
         }
     }
@@ -62,7 +62,7 @@ namespace Softplus
         {
             if (index.Ready == true)
             {
-                m_output.value = Math.Log(1 + m_input.value);
+                m_output.value = (float)Math.Log(1 + m_input.value);
             }
         }
     }

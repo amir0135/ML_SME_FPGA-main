@@ -19,7 +19,7 @@ namespace Deflib
 
         int Row, Col, Dim;
 
-        public SME.Components.SimpleDualPortMemory<double> ram;
+        public SME.Components.SimpleDualPortMemory<float> ram;
 
         public TestIndexSim(IndexControl control, int Row)
         {
@@ -70,13 +70,13 @@ namespace Deflib
         private IndexValue index;
 
         [OutputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IWriteControl output;
+        private SME.Components.SimpleDualPortMemory<float>.IWriteControl output;
 
         int size;
         string CSVfile;
-        public double[] A;
+        public float[] A;
 
-        public Dataload(int size, string CSVfile, IndexValue value, SME.Components.SimpleDualPortMemory<double>.IWriteControl output)
+        public Dataload(int size, string CSVfile, IndexValue value, SME.Components.SimpleDualPortMemory<float>.IWriteControl output)
         {
             this.size = size;
             this.CSVfile = CSVfile;
@@ -85,7 +85,7 @@ namespace Deflib
 
             A = File.ReadAllLines(CSVfile)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => double.Parse(x.Trim(), CultureInfo.InvariantCulture))
+                .Select(x => float.Parse(x.Trim(), CultureInfo.InvariantCulture))
                 .ToArray();
         }
 
@@ -110,16 +110,16 @@ namespace Deflib
     public class Mul : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputA;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputA;
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_inputB;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_inputB;
         [InputBus]
         private IndexValue input_pipe;
 
         [OutputBus]
         private ValueTransfer v_output;
 
-        public Mul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<double>.IReadResult inputA, SME.Components.SimpleDualPortMemory<double>.IReadResult inputB, ValueTransfer output)
+        public Mul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<float>.IReadResult inputA, SME.Components.SimpleDualPortMemory<float>.IReadResult inputB, ValueTransfer output)
         {
             input_pipe = inputpipe ?? throw new ArgumentNullException(nameof(inputpipe));
             m_inputA = inputA ?? throw new ArgumentNullException(nameof(inputA));

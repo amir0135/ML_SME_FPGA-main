@@ -21,8 +21,8 @@ namespace Matmul
 
                 var matmul_expected = Deflib.Functions.Flatten(Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0));
 
-                var array_x = new SimpleDualPortMemory<double>((int)Deflib.Parameters.Batchsize * (int)Deflib.Parameters.input_size, x_data);
-                var array_W0 = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, tra_W0_data);
+                var array_x = new SimpleDualPortMemory<float>((int)Deflib.Parameters.Batchsize * (int)Deflib.Parameters.input_size, x_data);
+                var array_W0 = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, tra_W0_data);
 
                 var matmul_x_ready = new Deflib.TestIndexSim(control_x, (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
                 var prelu_W0_ready = new Deflib.TestIndexSim(control_W0, (int)Deflib.Parameters.input_size, (int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
@@ -40,10 +40,10 @@ namespace Matmul
 
     public class MatmulStage
     {
-        public SimpleDualPortMemory<double> ram_out_1;
+        public SimpleDualPortMemory<float> ram_out_1;
         public IndexControl control_out;
 
-        public MatmulStage(IndexControl controlA_in, IndexControl controlB_in, SimpleDualPortMemory<double> ramA_in, SimpleDualPortMemory<double> ramB_in)
+        public MatmulStage(IndexControl controlA_in, IndexControl controlB_in, SimpleDualPortMemory<float> ramA_in, SimpleDualPortMemory<float> ramB_in)
         {
             var matmulindex_A = Scope.CreateBus<IndexValue>();
             var matmulindex_B = Scope.CreateBus<IndexValue>();
@@ -58,12 +58,12 @@ namespace Matmul
             var pipe2_control = Scope.CreateBus<IndexControl>();
             var pipe3_control = Scope.CreateBus<IndexControl>();
 
-            var forwarded = Scope.CreateBus<SimpleDualPortMemory<double>.IReadResult>();
+            var forwarded = Scope.CreateBus<SimpleDualPortMemory<float>.IReadResult>();
             var matmulresult = Scope.CreateBus<ValueTransfer>();
             var matmulindex_AB = Scope.CreateBus<ValueTransfer>();
 
-            var ram_out = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
-            ram_out_1 = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
+            var ram_out = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
+            ram_out_1 = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
 
             var generatemat_x = new Generate(matmulindex_A, ramA_in.ReadControl);
             var generatemat_W0 = new Generate(matmulindex_B, ramB_in.ReadControl);

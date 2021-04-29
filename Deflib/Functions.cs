@@ -6,7 +6,7 @@ namespace Deflib
     //All functions used in ML written in C# for when testing data
     public class Functions
     {
-        public static void ZeroMatrix(double[, ,] M)
+        public static void ZeroMatrix(float[, ,] M)
         {
             int row = M.GetLength(0); // finds dimension
             int col = M.GetLength(1);
@@ -23,7 +23,7 @@ namespace Deflib
             }
         }
 
-        public static void ZeroMatrix(double[,] M)
+        public static void ZeroMatrix(float[,] M)
         {
             int row = M.GetLength(0); // finds dimension
             int col = M.GetLength(1);
@@ -82,48 +82,48 @@ namespace Deflib
         }
 
 
-        public static double[,] reshape(double[,,] X, int r0, int r1)
+        public static float[,] reshape(float[,,] X, int r0, int r1)
         {
-            var Xnew = new double[r0,r1];
-            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(double));
+            var Xnew = new float[r0,r1];
+            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(float));
             return Xnew;
         }
 
-        public static double[,] reshape(double[] X, int r0, int r1)
+        public static float[,] reshape(float[] X, int r0, int r1)
         {
-            var Xnew = new double[r0,r1];
-            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(double));
+            var Xnew = new float[r0,r1];
+            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(float));
             return Xnew;
         }
 
-        public static double[,,] reshape(double[] X, int r0, int r1, int r2)
+        public static float[,,] reshape(float[] X, int r0, int r1, int r2)
         {
-            var Xnew = new double[r0,r1,r2];
-            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*r2*sizeof(double));
+            var Xnew = new float[r0,r1,r2];
+            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*r2*sizeof(float));
             return Xnew;
         }
 
-        public static double[,,] reshape(double[,] X, int r0, int r1, int r2)
+        public static float[,,] reshape(float[,] X, int r0, int r1, int r2)
         {
-            var Xnew = new double[r0,r1,r2];
-            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*r2*sizeof(double));
+            var Xnew = new float[r0,r1,r2];
+            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*r2*sizeof(float));
             return Xnew;
         }
 
-        public static double[,] reshape(double[,] X, int r0, int r1)
+        public static float[,] reshape(float[,] X, int r0, int r1)
         {
-            var Xnew = new double[r0,r1];
-            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(double));
+            var Xnew = new float[r0,r1];
+            Buffer.BlockCopy(X, 0, Xnew, 0, r0*r1*sizeof(float));
             return Xnew;
         }
 
-        public static double[,] matmul(double[,] X, double[,] Y)
+        public static float[,] matmul(float[,] X, float[,] Y)
         {
             int x_row = X.GetLength(0); // find dimensions
             int x_col = X.GetLength(1);
             int y_row = Y.GetLength(0);
             int y_col = Y.GetLength(1);
-            double[,] result = new double[x_row, y_col];
+            float[,] result = new float[x_row, y_col];
 
             for (int i = 0; i < x_row; i++) // loops over row and col
             {
@@ -139,12 +139,12 @@ namespace Deflib
             return result;
         }
 
-        public static double[,] transpose(double[,] matrix)
+        public static float[,] transpose(float[,] matrix)
         {
             int w = matrix.GetLength(0);
             int h = matrix.GetLength(1);
 
-            double[,] result = new double[h, w];
+            float[,] result = new float[h, w];
 
             for (int i = 0; i < w; i++)
             {
@@ -157,11 +157,11 @@ namespace Deflib
             return result;
         }
 
-        public static double[,] multiply(double[,] mat1, double[,] mat2)
+        public static float[,] multiply(float[,] mat1, float[,] mat2)
         {
             int a = mat1.GetLength(0);
             int b = mat1.GetLength(1);
-            double[,] matresult = new double[a,b];
+            float[,] matresult = new float[a,b];
 
             ZeroMatrix(matresult);
             for (int i = 0; i < a; i++)
@@ -175,12 +175,12 @@ namespace Deflib
             return matresult;
         }
 
-        public static double[,,] multiply(double[,,] mat1, double[,,] mat2)
+        public static float[,,] multiply(float[,,] mat1, float[,,] mat2)
         {
             int a = mat1.GetLength(0);
             int b = mat1.GetLength(1);
             int c = mat1.GetLength(2);
-            double[,,] matresult = new double[a,b,c];
+            float[,,] matresult = new float[a,b,c];
 
             ZeroMatrix(matresult);
             for (int i = 0; i < a; i++)
@@ -197,47 +197,47 @@ namespace Deflib
             return matresult;
         }
 
-        public static double[] sigmoid(double[,] X)
+        public static float[] sigmoid(float[,] X)
         {
-            //double[] X = Flatten(X);
+            //float[] X = Flatten(X);
             int row = X.GetLength(0); // finds dimension
             //int col = X.GetLength(1);
 
-            double[] sig = new double[row];
+            float[] sig = new float[row];
 
             for (int i = 0; i < row; i++) // loops over row and col
             {
-                sig[i] = 1 /(1 + Math.Exp(-i));
+                sig[i] = (float)(1 /(1 + Math.Exp(-i)));
             }
 
             return sig;
         }
 
-        public static double[,] sigmoid2d(double[,] X)
+        public static float[,] sigmoid2d(float[,] X)
         {
             int row = X.GetLength(0); // finds dimension
             int col = X.GetLength(1);
 
-            double[,] sig = new double[row,col];
+            float[,] sig = new float[row,col];
 
             for (int i = 0; i < row; i++) // loops over row and col
             {
                 for (int j = 0; j < col; j++)
                 {
-                    sig[i,j] = 1 /(1 + Math.Exp(-X[i,j]));
+                    sig[i,j] = (float)(1 /(1 + (float)Math.Exp(-X[i,j])));
                 }
             }
 
             return sig;
         }
 
-        public static double[,] softplus(double[,] X)
+        public static float[,] softplus(float[,] X)
         {
             int row = X.GetLength(0); // finds dimension
             int col = X.GetLength(1);
             int threshold = 20;
 
-            double[,] soft = new double[row,col];
+            float[,] soft = new float[row,col];
 
             for (int i = 0; i < row; i++) // loops over row and col
             {
@@ -249,7 +249,7 @@ namespace Deflib
                     }
                     else
                     {
-                        soft[i,j] = Math.Log(1 + Math.Exp(X[i,j]));
+                        soft[i,j] = ((float)Math.Log(1 + Math.Exp(X[i,j])));
                     }
                 }
             }
@@ -257,12 +257,12 @@ namespace Deflib
             return soft;
         }
 
-        public static double[,] clamp(double[,] matrix, double  min_val, double max_val)
+        public static float[,] clamp(float[,] matrix, float  min_val, float max_val)
         {
             int row = matrix.GetLength(0); // finds dimension
             int col = matrix.GetLength(1);
 
-            double[,] a = new double[row,col];
+            float[,] a = new float[row,col];
             Array.Copy(matrix, a, row * col);
 
             for (int i = 0; i < row; i++)
@@ -300,50 +300,50 @@ namespace Deflib
 
         }
 
-        public static double[] uniform(int x)
+        public static float[] uniform(int x)
         {
-            double[] M = new double[x];
+            float[] M = new float[x];
             RandomProportional randObj = new RandomProportional();
 
-            // Generate and display [rows * cols] random doubles.
+            // Generate and display [rows * cols] random floats.
             for(int i = 0; i < x; i++)
             {
-                M[i] = randObj.NextDouble();
+                M[i] = (float)randObj.NextDouble();
             }
 
             return M;
         }
 
-        public static double[,] uniform(int x, int y)
+        public static float[,] uniform(int x, int y)
         {
-            double[,] M = new double[x,y];
+            float[,] M = new float[x,y];
             RandomProportional randObj = new RandomProportional();
 
-            // Generate and display [rows * cols] random doubles.
+            // Generate and display [rows * cols] random floats.
             for(int i = 0; i < x; i++)
             {
                 for(int j = 0; j < y; j++)
                 {
-                    M[i,j] = randObj.NextDouble();
+                    M[i,j] = (float)randObj.NextDouble();
                 }
             }
 
             return M;
         }
 
-        public static double[,,] uniform(int x, int y, int z)
+        public static float[,,] uniform(int x, int y, int z)
         {
-            double[,,] M = new double[x,y,z];
+            float[,,] M = new float[x,y,z];
             RandomProportional randObj = new RandomProportional();
 
-            // Generate and display [rows * cols] random doubles.
+            // Generate and display [rows * cols] random floats.
             for(int i = 0; i < x; i++)
             {
                 for(int j = 0; j < y; j++)
                 {
                     for(int k = 0; k < z; k++)
                     {
-                        M[i,j,k] = randObj.NextDouble();
+                        M[i,j,k] = (float)randObj.NextDouble();
                     }
                 }
             }
@@ -353,12 +353,12 @@ namespace Deflib
 
 
 
-        public static double mean(double[,] lst)
+        public static float mean(float[,] lst)
         {
             int x = lst.GetLength(0);
             int y = lst.GetLength(1);
 
-            double value = 0;
+            float value = 0;
 
             for(int i = 0; i < x; i++)
             {
@@ -373,7 +373,7 @@ namespace Deflib
             return value;
         }
 
-        public static void PrintArray(double[] M)
+        public static void PrintArray(float[] M)
         {
             int n = M.GetLength(0);
 
@@ -383,7 +383,7 @@ namespace Deflib
             }
         }
 
-        public static void PrintMatrix(double[,] M)
+        public static void PrintMatrix(float[,] M)
         {
             int row = M.GetLength(0);
             int col = M.GetLength(1);
@@ -398,7 +398,7 @@ namespace Deflib
             }
         }
 
-        public static void PrintTensor(double[,,] M)
+        public static void PrintTensor(float[,,] M)
         {
             int row = M.GetLength(0);
             int col = M.GetLength(1);

@@ -16,7 +16,7 @@ namespace Transpose
 
                 var transpose_expected = Deflib.Functions.Flatten(Generate_data.transpose());
 
-                var array_test = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, Deflib.data.W0);
+                var array_test = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, Deflib.data.W0);
 
                 var testind = new TestIndexSim(test_control, (int)Deflib.Parameters.input_size, (int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
                 var transpose = new TransposeStage(test_control, array_test);
@@ -33,10 +33,10 @@ namespace Transpose
 
     public class TransposeStage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public TransposeStage(IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        public TransposeStage(IndexControl control_in, SME.Components.SimpleDualPortMemory<float> ram_in)
         {
             var transposeindex_W0_A = Scope.CreateBus<IndexValue>();
             var transposeindex_W0_B = Scope.CreateBus<IndexValue>();
@@ -46,7 +46,7 @@ namespace Transpose
 
             var generate_tra_W0 = new Generate(transposeindex_W0_A, ram_in.ReadControl);
 
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size);
 
             var transposeind_tra_W0 = new Transpose(control_in, transposeindex_W0_A, transposeindex_W0_B, control_out);
             var pipe_tra_W0 = new Pipe(transposeindex_W0_B, pipeouttra_W0);

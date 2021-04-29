@@ -9,7 +9,7 @@ namespace mulmin_sig
     public class Mulmin_mul : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
         [InputBus]
         private IndexValue index;
         [InputBus]
@@ -18,7 +18,7 @@ namespace mulmin_sig
         [OutputBus]
         private ValueTransfer m_output;
 
-        public Mulmin_mul(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
+        public Mulmin_mul(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));

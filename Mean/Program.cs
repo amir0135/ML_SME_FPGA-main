@@ -22,7 +22,7 @@ namespace Mean
                 var clamp_flat = Deflib.Functions.Flatten(clamp_data);
 
                 var mean_expected = Deflib.Generate_data.ensemble_predictions(clamp_data);
-                var array_clamp = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, clamp_flat);
+                var array_clamp = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, clamp_flat);
 
                 var index_clamp = new TestIndexSim(control_clamp, 1, (int)Deflib.Parameters.num_networks);
                 var index_mean = new TestIndexSim(control_mean, 1, (int)Deflib.Parameters.num_networks);
@@ -41,10 +41,10 @@ namespace Mean
 
     public class Mean_Stage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public Mean_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        public Mean_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<float> ram_in)
         {
             var mean_index_A = Scope.CreateBus<IndexValue>();
             var mean_index_B = Scope.CreateBus<IndexValue>();
@@ -85,7 +85,7 @@ namespace Mean
             var should_save = new ShouldSave(pipeout1_mean, flag_2, pipeout2_mean);
 
             // Stage 4 - Save to RAM
-            ram_out = new SME.Components.SimpleDualPortMemory<double>(1);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>(1);
             var toram_mean = new ToRam(mean_result_2, pipeout2_mean, ram_out.WriteControl);
         }
     }

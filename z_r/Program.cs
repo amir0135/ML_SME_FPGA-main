@@ -23,8 +23,8 @@ namespace z_r
 
                 var z_expected = Deflib.Functions.Flatten(Deflib.Generate_data.z_r(hz_data.Item1, hz_data.Item2).Item1);
 
-                var array_hz = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, hz_flat);
-                var array_wz = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.data.Wz);
+                var array_hz = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, hz_flat);
+                var array_wz = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.data.Wz);
 
                 var index_z = new TestIndexSim(control_z, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var hz_ready = new TestIndexSim(control_hz, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size, 1);
@@ -44,8 +44,8 @@ namespace z_r
 
                 var r_expected = Deflib.Functions.Flatten(Deflib.Generate_data.z_r(hr_data.Item1, hr_data.Item2).Item2);
 
-                var array_hr = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, hr_flat);
-                var array_wr = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.data.Wr);
+                var array_hr = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, hr_flat);
+                var array_wr = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.data.Wr);
 
                 var index_r = new TestIndexSim(control_r, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var hr_ready = new TestIndexSim(control_hr, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size, 1);
@@ -70,10 +70,10 @@ namespace z_r
 
     public class zStage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public zStage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SME.Components.SimpleDualPortMemory<double> ramA_in, SME.Components.SimpleDualPortMemory<double> ramB_in)
+        public zStage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SME.Components.SimpleDualPortMemory<float> ramA_in, SME.Components.SimpleDualPortMemory<float> ramB_in)
         {
             var z_index_A = Scope.CreateBus<IndexValue>();
             var z_index_B = Scope.CreateBus<IndexValue>();
@@ -83,7 +83,7 @@ namespace z_r
             var z_result = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
 
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
 
             var generate_z_A = new Generate(z_index_A, ramA_in.ReadControl);
             var generate_z_B = new Generate(z_index_B, ramB_in.ReadControl);

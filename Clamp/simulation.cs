@@ -6,7 +6,7 @@ namespace Clamp
 
     public class Generate_RZ
     {
-        public static double[,] gen_RZ()
+        public static float[,] gen_RZ()
         {
             //making softplus function
             var matmul = Deflib.Generate_data.matmul_mat(Deflib.dataMatrix.x, Deflib.dataMatrix.W0);

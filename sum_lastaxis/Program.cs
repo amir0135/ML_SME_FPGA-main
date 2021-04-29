@@ -21,7 +21,7 @@ namespace sum_lastaxis
 
                 var SLA_z_expected = Deflib.Functions.Flatten(Deflib.Generate_data.gen_SLA(z_data.Item1, z_data.Item2).Item1);
 
-                var array_z = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, z_flat);
+                var array_z = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, z_flat);
 
                 var index_SLA_z = new TestIndexSim(control_SLA_z, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var z_ready = new TestIndexSim(control_z, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
@@ -40,7 +40,7 @@ namespace sum_lastaxis
 
                 var SLA_r_expected = Deflib.Functions.Flatten(Deflib.Generate_data.gen_SLA(r_data.Item1, r_data.Item2).Item1);
 
-                var array_r = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, r_flat);
+                var array_r = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, r_flat);
 
                 var index_SLA_r = new TestIndexSim(control_SLA_r, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
                 var Wr_ready = new TestIndexSim(control_r, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
@@ -58,10 +58,10 @@ namespace sum_lastaxis
 
     public class SLA_Stage
     {
-        public SME.Components.SimpleDualPortMemory<double> ram_out;
+        public SME.Components.SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public SLA_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<double> ram_in)
+        public SLA_Stage(IndexControl testcontrol, IndexControl control_in, SME.Components.SimpleDualPortMemory<float> ram_in)
         {
             var SLA_z_index_A = Scope.CreateBus<IndexValue>();
             var SLA_z_index_B = Scope.CreateBus<IndexValue>();
@@ -71,7 +71,7 @@ namespace sum_lastaxis
             var SLA_z_result = Scope.CreateBus<ValueTransfer>();
             control_out = Scope.CreateBus<IndexControl>();
 
-            ram_out = new SME.Components.SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks);
+            ram_out = new SME.Components.SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks);
 
             var generate_z_SLA = new Generate(SLA_z_index_A, ram_in.ReadControl);
 

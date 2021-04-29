@@ -6,7 +6,7 @@ namespace Deflib
 
     public interface ValueTransfer : IBus
     {
-        double value { get; set; }
+        float value { get; set; }
     }
 
     public interface IndexTransfer : IBus
@@ -16,12 +16,12 @@ namespace Deflib
 
     public interface VectorTransfer : IBus
     {
-        double[] vector { get; set; }
+        float[] vector { get; set; }
     }
 
     public interface MatrixTransfer : IBus
     {
-        double[,] matrix { get; set; }
+        float[,] matrix { get; set; }
     }
 
     public interface IndexValue : IBus

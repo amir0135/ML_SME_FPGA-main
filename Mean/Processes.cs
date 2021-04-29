@@ -46,7 +46,7 @@ namespace Mean
     public class Mean_add : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult m_input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult m_input;
         [InputBus]
         private IndexValue index;
         [InputBus]
@@ -55,9 +55,9 @@ namespace Mean
         [OutputBus]
         private ValueTransfer m_output;
 
-        private double accumulated = 0;
+        private float accumulated = 0;
 
-        public Mean_add(SME.Components.SimpleDualPortMemory<double>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
+        public Mean_add(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
         {
             m_input = input ?? throw new ArgumentNullException(nameof(input));
             this.index = index ?? throw new ArgumentNullException(nameof(index));

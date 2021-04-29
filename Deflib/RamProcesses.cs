@@ -15,9 +15,9 @@ namespace Deflib
         private IndexValue index;
 
         [OutputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadControl output;
+        private SME.Components.SimpleDualPortMemory<float>.IReadControl output;
 
-        public Generate(IndexValue value, SME.Components.SimpleDualPortMemory<double>.IReadControl output)
+        public Generate(IndexValue value, SME.Components.SimpleDualPortMemory<float>.IReadControl output)
         {
             index = value;
             this.output = output;
@@ -120,9 +120,9 @@ namespace Deflib
         private IndexValue Address;
 
         [OutputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IWriteControl output;
+        private SME.Components.SimpleDualPortMemory<float>.IWriteControl output;
 
-        public ToRam(ValueTransfer v_input, IndexValue Address, SME.Components.SimpleDualPortMemory<double>.IWriteControl output)
+        public ToRam(ValueTransfer v_input, IndexValue Address, SME.Components.SimpleDualPortMemory<float>.IWriteControl output)
         {
             this.v_input = v_input;
             this.Address = Address;
@@ -146,14 +146,14 @@ namespace Deflib
     public class Value_Converter : SimpleProcess
     {
         [InputBus]
-        private SME.Components.SimpleDualPortMemory<double>.IReadResult input;
+        private SME.Components.SimpleDualPortMemory<float>.IReadResult input;
         [InputBus]
         private IndexValue guard;
 
         [OutputBus]
         private ValueTransfer output;
 
-        public Value_Converter(IndexValue guard, SME.Components.SimpleDualPortMemory<double>.IReadResult input, ValueTransfer output)
+        public Value_Converter(IndexValue guard, SME.Components.SimpleDualPortMemory<float>.IReadResult input, ValueTransfer output)
         {
             this.guard = guard;
             this.input = input;

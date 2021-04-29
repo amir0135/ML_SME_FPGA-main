@@ -24,8 +24,8 @@ namespace HzHr
                 var matmul_data = Generate_matmul.Matmul_generate();
 
                 //putting iN array
-                var array_matmul = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.Functions.Flatten(matmul_data));
-                var array_prelu_z = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, Deflib.data.prelu_z_slopes);
+                var array_matmul = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, Deflib.Functions.Flatten(matmul_data));
+                var array_prelu_z = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, Deflib.data.prelu_z_slopes);
 
                 //generate expected data
                 var hz_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item1);
@@ -47,7 +47,7 @@ namespace HzHr
                 var control_hr = Scope.CreateBus<IndexControl>();
 
                 //putting iN array
-                var array_prelu_r = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks, Deflib.data.prelu_r_slopes);
+                var array_prelu_r = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks, Deflib.data.prelu_r_slopes);
 
                 //generate expected data
                 var hr_expected = Deflib.Functions.Flatten(Deflib.Generate_data.generate_hz(matmul_data, Deflib.dataMatrix.x).Item2);
@@ -77,10 +77,10 @@ namespace HzHr
 
     public class HzStage
     {
-        public SimpleDualPortMemory<double> ram_out;
+        public SimpleDualPortMemory<float> ram_out;
         public IndexControl control_out;
 
-        public HzStage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SimpleDualPortMemory<double> ramA_in, SimpleDualPortMemory<double> ramB_in)
+        public HzStage(IndexControl testcontrol, IndexControl controlA_in, IndexControl controlB_in, SimpleDualPortMemory<float> ramA_in, SimpleDualPortMemory<float> ramB_in)
         {
             var hz_index_A = Scope.CreateBus<IndexValue>();
             var hz_index_B = Scope.CreateBus<IndexValue>();
@@ -91,7 +91,7 @@ namespace HzHr
 
             control_out = Scope.CreateBus<IndexControl>();
 
-            ram_out = new SimpleDualPortMemory<double>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
+            ram_out = new SimpleDualPortMemory<float>((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size);
 
             var generateHzA = new Generate(hz_index_A, ramA_in.ReadControl);
             var generateHzB = new Generate(hz_index_B, ramB_in.ReadControl);
