@@ -87,6 +87,7 @@ namespace Deflib
             A = File.ReadAllLines(CSVfile)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Select(x => float.Parse(x.Trim(), CultureInfo.InvariantCulture))
+                .Take(size)
                 .ToArray();
         }
 
