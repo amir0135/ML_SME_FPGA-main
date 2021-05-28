@@ -31,10 +31,11 @@ namespace Deflib
 
             await ClockAsync();
             var match = true;
+            float accepted_error = 1e-5f;
             for (int i = 0; i < expected.Length; i++)
             {
-                match = match && Math.Abs(ram.m_memory[i] - expected[i]) < 0.0000001;
-                if (!(Math.Abs(ram.m_memory[i] - expected[i]) < 0.0000001))
+                match = match && Math.Abs(ram.m_memory[i] - expected[i]) < accepted_error;
+                if (!(Math.Abs(ram.m_memory[i] - expected[i]) < accepted_error))
                     Console.WriteLine($"{i} {ram.m_memory[i]} != {expected[i]}");
             }
 
