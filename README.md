@@ -1,5 +1,8 @@
-abc
+
 # ML_SME_FPGA
 
-Her kan du skrive beskrivelse!
+Added libraries for a FNN for users working with SME.
+
+#Usage
+``` first download SME from 
 abg
