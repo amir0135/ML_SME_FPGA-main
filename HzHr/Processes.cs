@@ -134,6 +134,7 @@ begin
         }
     }
 
+    [ClockedProcess]
     public class HzIndex : SimpleProcess
     {
         [InputBus]
@@ -152,7 +153,6 @@ begin
 
         private bool running = false;
         private int i = 0, j = 0, k = 0;
-        private int Addr;
         private int width, height, dim;
         private bool Aready = false, Bready = false;
         private bool started = false;

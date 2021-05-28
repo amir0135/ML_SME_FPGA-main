@@ -4,6 +4,7 @@ using Deflib;
 namespace RZ
 {
 
+    [ClockedProcess]
     public class ZIndex : SimpleProcess
     {
         [InputBus]
@@ -22,7 +23,6 @@ namespace RZ
 
         private bool running = false;
         private int i, j, k = 0;
-        private int Addr;
         private int width, height, dim;
         private bool Aready = false, Bready = false;
         private bool started = false;

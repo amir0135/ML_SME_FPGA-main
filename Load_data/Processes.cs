@@ -4,6 +4,7 @@ using Deflib;
 namespace Load_data
 {
 
+    [ClockedProcess]
     public class Index : SimpleProcess
     {
         [InputBus]

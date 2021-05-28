@@ -5,6 +5,7 @@ using Deflib;
 namespace Transpose
 {
 
+    [ClockedProcess]
     public class Transpose : SimpleProcess
     {
         [InputBus]
@@ -19,7 +20,6 @@ namespace Transpose
 
         private bool running = false;
         private int i, j = 0;
-        private int Addr;
         private int width, height;
         private bool started = false;
 

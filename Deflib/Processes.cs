@@ -200,6 +200,7 @@ begin
         }
     }
 
+    [ClockedProcess]
     public class MulIndex : SimpleProcess
     {
         [InputBus]
@@ -217,8 +218,7 @@ begin
         private IndexControl controlout;
 
         private bool running = false;
-        private int i, j, k = 0;
-        private int Addr;
+        private int i, j;
         private int width, height;
         private bool Aready = false, Bready = false;
         private bool started = false;
@@ -304,6 +304,7 @@ begin
         }
     }
 
+    [ClockedProcess]
     public class SigIndex : SimpleProcess
     {
         [InputBus]
@@ -318,7 +319,6 @@ begin
 
         private bool running = false;
         private int i = 0;
-        private int Addr;
         private int width, height;
         private bool Aready = false;
         private bool started = false;
@@ -387,6 +387,7 @@ begin
         }
     }
 
+    [ClockedProcess]
     public class SigIndex_flag : SimpleProcess
     {
         [InputBus]
@@ -403,7 +404,6 @@ begin
 
         private bool running = false;
         private int i = 0;
-        private int Addr;
         private int width, height;
         private bool Aready = false;
         private bool started = false;
