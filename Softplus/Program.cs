@@ -33,8 +33,11 @@ namespace Softplus
                 var outsimtra = new OutputSim(soft.control_out, soft.ram_out, soft_expected);
 
                 sim
+                    .AddTopLevelInputs(control_r, control_soft, array_r.WriteControl, soft.ram_out.ReadControl)
+                    .AddTopLevelOutputs(soft.control_out, soft.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

@@ -55,8 +55,11 @@ namespace z_r
                 var outsim_r = new OutputSim(r.control_out, r.ram_out, r_expected);
 
                 sim
+                    .AddTopLevelInputs(control_hz, control_wz, control_z, control_hr, control_wr, control_r, array_hz.WriteControl, array_wz.WriteControl, array_hr.WriteControl, array_wr.WriteControl, z.ram_out.ReadControl, r.ram_out.ReadControl)
+                    .AddTopLevelOutputs(z.control_out, r.control_out, z.ram_out.ReadResult, r.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run(exitMethod:
                         () =>
                         {

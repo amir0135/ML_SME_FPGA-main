@@ -1,5 +1,6 @@
 using System;
 using SME;
+using SME.VHDL;
 using Deflib;
 
 namespace Matmul
@@ -16,6 +17,65 @@ namespace Matmul
 
         [OutputBus]
         private ValueTransfer v_output;
+
+        public class Renderer : ICustomRenderer
+        {
+            public string IncludeRegion(RenderStateProcess renderer, int indentation)
+            {
+                return string.Empty;
+            }
+
+            public string BodyRegion(RenderStateProcess renderer, int indentation)
+            {
+                return @"
+    signal add_res : T_SYSTEM_FLOAT := (others => '0');
+    signal ignore : std_logic;
+
+    -- create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name matmul_fl_add
+    -- set_property -dict [list CONFIG.Component_Name {matmul_fl_add} CONFIG.Add_Sub_Value {Add} CONFIG.Flow_Control {NonBlocking} CONFIG.Maximum_Latency {false} CONFIG.C_Latency {0} CONFIG.Has_RESULT_TREADY {false}] [get_ips matmul_fl_add]
+    COMPONENT matmul_fl_add
+    PORT (
+        s_axis_a_tvalid : IN STD_LOGIC;
+        s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_b_tvalid : IN STD_LOGIC;
+        s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_result_tvalid : OUT STD_LOGIC;
+        m_axis_result_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+begin
+    process (
+        CLK,
+        RST
+    )
+    begin
+        if RST = '1' then
+            FIN <= '0';
+        elsif rising_edge(CLK) then
+            if input_pipe_Ready = '1' then
+                v_output_Value <= add_res;
+            else
+                v_output_Value <= (others => '0');
+            end if;
+            FIN <= not RDY;
+        end if;
+    end process;
+
+    adder : matmul_fl_add
+    PORT MAP (
+        s_axis_a_tvalid => input_pipe_Ready,
+        s_axis_a_tdata => m_inputC_Data,
+        s_axis_b_tvalid => input_pipe_Ready,
+        s_axis_b_tdata => m_inputAB_Value,
+        m_axis_result_tvalid => ignore,
+        m_axis_result_tdata => add_res
+    );
+                ";
+            }
+        }
+        [Ignore]
+        private Renderer renderer = new Renderer();
+        public override object CustomRenderer { get { return renderer; } }
 
         public MatMul_add(IndexValue inputpipe, ValueTransfer inputAB, SME.Components.SimpleDualPortMemory<float>.IReadResult inputC, ValueTransfer output)
         {
@@ -50,6 +110,65 @@ namespace Matmul
 
         [OutputBus]
         private ValueTransfer v_output;
+
+        public class Renderer : ICustomRenderer
+        {
+            public string IncludeRegion(RenderStateProcess renderer, int indentation)
+            {
+                return string.Empty;
+            }
+
+            public string BodyRegion(RenderStateProcess renderer, int indentation)
+            {
+                return @"
+    signal mul_res : T_SYSTEM_FLOAT := (others => '0');
+    signal ignore : std_logic;
+
+    -- create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name matmul_fl_mul
+    -- set_property -dict [list CONFIG.Component_Name {matmul_fl_mul} CONFIG.Operation_Type {Multiply} CONFIG.Flow_Control {NonBlocking} CONFIG.Maximum_Latency {false} CONFIG.C_Latency {0} CONFIG.A_Precision_Type {Single} CONFIG.C_A_Exponent_Width {8} CONFIG.C_A_Fraction_Width {24} CONFIG.Result_Precision_Type {Single} CONFIG.C_Result_Exponent_Width {8} CONFIG.C_Result_Fraction_Width {24} CONFIG.C_Mult_Usage {Full_Usage} CONFIG.Has_RESULT_TREADY {false} CONFIG.C_Rate {1}] [get_ips matmul_fl_mul]
+    COMPONENT matmul_fl_mul
+    PORT (
+        s_axis_a_tvalid : IN STD_LOGIC;
+        s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_b_tvalid : IN STD_LOGIC;
+        s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_result_tvalid : OUT STD_LOGIC;
+        m_axis_result_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+begin
+    process (
+        CLK,
+        RST
+    )
+    begin
+        if RST = '1' then
+            FIN <= '0';
+        elsif rising_edge(CLK) then
+            if input_pipe_Ready = '1' then
+                v_output_Value <= mul_res;
+            else
+                v_output_Value <= (others => '0');
+            end if;
+            FIN <= not RDY;
+        end if;
+    end process;
+
+    muller : matmul_fl_mul
+    PORT MAP (
+        s_axis_a_tvalid => input_pipe_Ready,
+        s_axis_a_tdata => m_inputA_Data,
+        s_axis_b_tvalid => input_pipe_Ready,
+        s_axis_b_tdata => m_inputB_Data,
+        m_axis_result_tvalid => ignore,
+        m_axis_result_tdata => mul_res
+    );
+                ";
+            }
+        }
+        [Ignore]
+        private Renderer renderer = new Renderer();
+        public override object CustomRenderer { get { return renderer; } }
 
         public MatMul(IndexValue inputpipe, SME.Components.SimpleDualPortMemory<float>.IReadResult inputA, SME.Components.SimpleDualPortMemory<float>.IReadResult inputB, ValueTransfer output)
         {
@@ -92,7 +211,6 @@ namespace Matmul
 
         private bool running = false;
         private int i = 0, j = 0, k = 0;
-        private int Addr;
         private int widthA, heightA, widthB, heightB;
         private bool Aready = false, Bready = false;
         private bool started = false;

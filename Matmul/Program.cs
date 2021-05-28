@@ -31,8 +31,11 @@ namespace Matmul
                 var outsimtra = new OutputSim(matmul.control_out, matmul.ram_out_1, matmul_expected);
 
                 sim
+                    .AddTopLevelInputs(array_x.WriteControl, array_W0.WriteControl, control_x, control_W0, matmul.ram_out_1.ReadControl)
+                    .AddTopLevelOutputs(matmul.control_out, matmul.ram_out_1.ReadResult)
                     .BuildCSVFile()
-                    .BuildGraph()
+                    .BuildGraph(render_buses:false)
+                    .BuildVHDL()
                     .Run();
             }
         }

@@ -1,4 +1,5 @@
 using SME;
+using SME.VHDL;
 using Deflib;
 using System;
 
@@ -55,6 +56,69 @@ namespace Mean
         [OutputBus]
         private ValueTransfer m_output;
 
+        public class Renderer : ICustomRenderer
+        {
+            public string IncludeRegion(RenderStateProcess renderer, int indentation)
+            {
+                return string.Empty;
+            }
+
+            public string BodyRegion(RenderStateProcess renderer, int indentation)
+            {
+                return @"
+    signal accumulated : T_SYSTEM_FLOAT := (others => '0');
+    signal add_res : T_SYSTEM_FLOAT := (others => '0');
+    signal ignore : std_logic;
+
+    -- create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name mean_fl_add
+    -- set_property -dict [list CONFIG.Component_Name {mean_fl_add} CONFIG.Add_Sub_Value {Add} CONFIG.Flow_Control {NonBlocking} CONFIG.Maximum_Latency {false} CONFIG.C_Latency {0} CONFIG.Has_RESULT_TREADY {false}] [get_ips mean_fl_add]
+    COMPONENT mean_fl_add
+    PORT (
+        s_axis_a_tvalid : IN STD_LOGIC;
+        s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_b_tvalid : IN STD_LOGIC;
+        s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_result_tvalid : OUT STD_LOGIC;
+        m_axis_result_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+begin
+    process (
+        CLK,
+        RST
+    )
+    begin
+        if RST = '1' then
+            FIN <= '0';
+        elsif rising_edge(CLK) then
+            if index_Ready = '1' then
+                if flush_flg = '1' then
+                    m_output_Value <= add_res;
+                    accumulated <= (others => '0');
+                else
+                    accumulated <= add_res;
+                end if;
+            end if;
+            FIN <= not RDY;
+        end if;
+    end process;
+
+    adder : mean_fl_add
+    PORT MAP (
+        s_axis_a_tvalid => index_Ready,
+        s_axis_a_tdata => accumulated,
+        s_axis_b_tvalid => index_Ready,
+        s_axis_b_tdata => m_input_Data,
+        m_axis_result_tvalid => ignore,
+        m_axis_result_tdata => add_res
+    );
+                ";
+            }
+        }
+        [Ignore]
+        private Renderer renderer = new Renderer();
+        public override object CustomRenderer { get { return renderer; } }
+
         private float accumulated = 0;
 
         public Mean_add(SME.Components.SimpleDualPortMemory<float>.IReadResult input, IndexValue index, ValueTransfer output, Flag flush)
@@ -98,7 +162,62 @@ namespace Mean
         [OutputBus]
         private ValueTransfer m_output;
 
-        private int ind = -1;
+        public class Renderer : ICustomRenderer
+        {
+            public string IncludeRegion(RenderStateProcess renderer, int indentation)
+            {
+                return string.Empty;
+            }
+
+            public string BodyRegion(RenderStateProcess renderer, int indentation)
+            {
+                return @"
+    signal div_res : T_SYSTEM_FLOAT := (others => '0');
+    signal ignore : std_logic;
+
+    -- create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name mean_fl_div
+    -- set_property -dict [list CONFIG.Component_Name {mean_fl_div} CONFIG.Operation_Type {Divide} CONFIG.Flow_Control {NonBlocking} CONFIG.Maximum_Latency {false} CONFIG.C_Latency {0} CONFIG.A_Precision_Type {Single} CONFIG.C_A_Exponent_Width {8} CONFIG.C_A_Fraction_Width {24} CONFIG.Result_Precision_Type {Single} CONFIG.C_Result_Exponent_Width {8} CONFIG.C_Result_Fraction_Width {24} CONFIG.C_Mult_Usage {No_Usage} CONFIG.Has_RESULT_TREADY {false} CONFIG.C_Rate {1}] [get_ips mean_fl_div]
+    COMPONENT mean_fl_div
+    PORT (
+        s_axis_a_tvalid : IN STD_LOGIC;
+        s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_b_tvalid : IN STD_LOGIC;
+        s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_result_tvalid : OUT STD_LOGIC;
+        m_axis_result_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+begin
+    process (
+        CLK,
+        RST
+    )
+    begin
+        if RST = '1' then
+            FIN <= '0';
+        elsif rising_edge(CLK) then
+            if index_Ready = '1' and flush_flg = '1' then
+                m_output_Value <= div_res;
+            end if;
+            FIN <= not RDY;
+        end if;
+    end process;
+
+    diver : mean_fl_div
+    PORT MAP (
+        s_axis_a_tvalid => index_Ready,
+        s_axis_a_tdata => m_input_Value,
+        s_axis_b_tvalid => index_Ready,
+        s_axis_b_tdata => m_count_Value,
+        m_axis_result_tvalid => ignore,
+        m_axis_result_tdata => div_res
+    );
+                ";
+            }
+        }
+        [Ignore]
+        private Renderer renderer = new Renderer();
+        public override object CustomRenderer { get { return renderer; } }
 
         public Mean_div(ValueTransfer input, ValueTransfer count, IndexValue index, Flag flush, ValueTransfer output)
         {
@@ -114,7 +233,6 @@ namespace Mean
             if (index.Ready && flush.flg)
             {
                 m_output.value = m_input.value / m_count.value;
-                ind = index.Addr;
             }
         }
     }

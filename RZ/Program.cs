@@ -37,8 +37,11 @@ namespace RZ
                 var outsimtra = new OutputSim(rz.control_out, rz.ram_out, RZ_expected);
 
                 sim
+                    .AddTopLevelInputs(control_rz, control_sig, control_soft, array_sig.WriteControl, array_soft.WriteControl, rz.ram_out.ReadControl)
+                    .AddTopLevelOutputs(rz.control_out, rz.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

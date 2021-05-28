@@ -31,8 +31,11 @@ namespace mulmin_sig
                 var outsimtra = new OutputSim(mulmin.control_out, mulmin.ram_out, mulmin_expected);
 
                 sim
+                    .AddTopLevelInputs(control_sig, control_mulmin, array_sigmoid.WriteControl, mulmin.ram_out.ReadControl)
+                    .AddTopLevelOutputs(mulmin.control_out, mulmin.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

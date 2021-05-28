@@ -32,8 +32,11 @@ namespace Clamp
                 var outsimtra = new OutputSim(clamp.control_out, clamp.ram_out, clamp_expected);
 
                 sim
+                    .AddTopLevelInputs(control_rz, control_clamp, array_rz.WriteControl, clamp.ram_out.ReadControl)
+                    .AddTopLevelOutputs(clamp.control_out, clamp.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

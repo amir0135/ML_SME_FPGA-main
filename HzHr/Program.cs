@@ -63,8 +63,11 @@ namespace HzHr
                 var outsim_hr = new OutputSim(hr.control_out, hr.ram_out, hr_expected);
 
                 sim
+                    .AddTopLevelInputs(control_matmul, control_prelu_r, control_prelu_z, control_hr, control_Hz, array_matmul.WriteControl, array_prelu_r.WriteControl, array_prelu_z.WriteControl, hr.ram_out.ReadControl, hz.ram_out.ReadControl)
+                    .AddTopLevelOutputs(hr.control_out, hz.control_out, hr.control_out, hz.control_out, hr.ram_out.ReadResult, hz.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run(exitMethod: () =>
                         {
                             OutputSim[] procs = { outsim_hz, outsim_hr };

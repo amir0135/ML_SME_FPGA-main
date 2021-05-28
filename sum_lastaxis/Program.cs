@@ -49,8 +49,11 @@ namespace sum_lastaxis
                 // var outsimtra = new OutputSim(SLA_r.control_out, SLA_r.ram_out, SLA_r_expected);
 
                 sim
+                    .AddTopLevelInputs(control_z, control_r, control_SLA_r, control_SLA_z, array_z.WriteControl, array_r.WriteControl, SLA_z.ram_out.ReadControl, SLA_r.ram_out.ReadControl)
+                    .AddTopLevelOutputs(SLA_z.control_out, SLA_r.control_out, SLA_z.ram_out.ReadResult, SLA_r.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

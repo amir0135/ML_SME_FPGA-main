@@ -32,8 +32,11 @@ namespace Mean
                 var outsimtra = new OutputSim(mean.control_out, mean.ram_out, mean_expected);
 
                 sim
+                    .AddTopLevelInputs(control_clamp, control_mean, array_clamp.WriteControl, mean.ram_out.ReadControl)
+                    .AddTopLevelOutputs(mean.control_out, mean.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

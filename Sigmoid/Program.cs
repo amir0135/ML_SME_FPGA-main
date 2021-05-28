@@ -31,8 +31,11 @@ namespace Sigmoid
                 var outsimtra = new OutputSim(sigmoid.control_out, sigmoid.ram_out, sig_expected);
 
                 sim
+                    .AddTopLevelInputs(control_zz, control_sig, array_zz.WriteControl, sigmoid.ram_out.ReadControl)
+                    .AddTopLevelOutputs(sigmoid.control_out, sigmoid.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

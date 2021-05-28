@@ -24,8 +24,11 @@ namespace Transpose
                 var outsimtra = new OutputSim(transpose.control_out, transpose.ram_out, transpose_expected);
 
                 sim
+                    .AddTopLevelInputs(test_control, array_test.WriteControl, transpose.ram_out.ReadControl)
+                    .AddTopLevelOutputs(transpose.control_out, transpose.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

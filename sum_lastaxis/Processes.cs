@@ -1,4 +1,5 @@
 using SME;
+using SME.VHDL;
 using Deflib;
 using System;
 
@@ -15,6 +16,72 @@ namespace sum_lastaxis
 
         [OutputBus]
         private ValueTransfer m_output;
+
+        public class Renderer : ICustomRenderer
+        {
+            public string IncludeRegion(RenderStateProcess renderer, int indentation)
+            {
+                return string.Empty;
+            }
+
+            public string BodyRegion(RenderStateProcess renderer, int indentation)
+            {
+                return @"
+    signal add_res : T_SYSTEM_FLOAT := (others => '0');
+    signal accumulated : T_SYSTEM_FLOAT := (others => '0');
+    signal ind : T_SYSTEM_INT32 := (others => '1');
+    signal ignore : std_logic;
+
+    -- create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name sumlast_fl_add
+    -- set_property -dict [list CONFIG.Component_Name {sumlast_fl_add} CONFIG.Add_Sub_Value {Add} CONFIG.Flow_Control {NonBlocking} CONFIG.Maximum_Latency {false} CONFIG.C_Latency {0} CONFIG.Has_RESULT_TREADY {false}] [get_ips sumlast_fl_add]
+    COMPONENT sumlast_fl_add
+    PORT (
+        s_axis_a_tvalid : IN STD_LOGIC;
+        s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_b_tvalid : IN STD_LOGIC;
+        s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_result_tvalid : OUT STD_LOGIC;
+        m_axis_result_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+begin
+    process (
+        CLK,
+        RST
+    )
+    begin
+        if RST = '1' then
+            FIN <= '0';
+        elsif rising_edge(CLK) then
+            if index_Ready = '1' then
+                if index_Addr = ind then
+                    accumulated <= add_res;
+                    m_output_Value <= accumulated;
+                else
+                    m_output_Value <= accumulated;
+                    accumulated <= m_input_Data;
+                    ind <= index_Addr;
+                end if;
+            end if;
+            FIN <= not RDY;
+        end if;
+    end process;
+
+    adder : sumlast_fl_add
+    PORT MAP (
+        s_axis_a_tvalid => index_Ready,
+        s_axis_a_tdata => accumulated,
+        s_axis_b_tvalid => index_Ready,
+        s_axis_b_tdata => m_input_Data,
+        m_axis_result_tvalid => ignore,
+        m_axis_result_tdata => add_res
+    );
+                ";
+            }
+        }
+        [Ignore]
+        private Renderer renderer = new Renderer();
+        public override object CustomRenderer { get { return renderer; } }
 
         private float accumulated;
         private int ind = -1;
@@ -62,9 +129,8 @@ namespace sum_lastaxis
 
         private bool running = false;
         private int i = 0, j = 0;
-        private int Addr;
         private int width, height;
-        private bool Aready, Bready = false;
+        private bool Aready;
         private bool started = false;
 
         public SLAIndex(IndexControl controlA, IndexValue outputA, IndexValue outputB, IndexControl controlout, IndexControl control)

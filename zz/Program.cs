@@ -36,8 +36,11 @@ namespace zz
                 var outsimtra = new OutputSim(zz.control_out, zz.ram_out, zz_expected);
 
                 sim
+                    .AddTopLevelInputs(control_z_scale, control_SLA, control_zz, array_zscale.WriteControl, array_SLA.WriteControl, zz.ram_out.ReadControl)
+                    .AddTopLevelOutputs(zz.control_out, zz.ram_out.ReadResult)
                     .BuildCSVFile()
                     .BuildGraph()
+                    .BuildVHDL()
                     .Run();
             }
         }

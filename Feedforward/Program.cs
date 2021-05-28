@@ -26,34 +26,42 @@ namespace Feedforward
             using (var sim = new Simulation())
             {
                 /////// data //////////
-                var W0_data = new LoadStage((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, "../Data/W0.csv",(int)Deflib.Parameters.input_size, (int)Deflib.Parameters.num_networks*(int)Deflib.Parameters.hidden_size);
-                var Wr_data = new LoadStage((int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, "../Data/Wr.csv", (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
-                var Wz_data = new LoadStage((int)Deflib.Parameters.num_networks*(int)Deflib.Parameters.hidden_size, "../Data/Wz.csv", (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
-                var Prelu_z_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/prelu_z_slopes.csv",(int)Deflib.Parameters.num_networks);
-                var Prelu_r_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/prelu_r_slopes.csv",(int)Deflib.Parameters.num_networks);
-                var z_scale_data = new LoadStage((int)Deflib.Parameters.num_networks, "../Data/z_scale.csv", 1, (int)Deflib.Parameters.num_networks);
-                var x_data = new LoadStage((int)Deflib.Parameters.Batchsize*(int)Deflib.Parameters.input_size, "../Data/x.csv", (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
+                var W0_data_control = Scope.CreateBus<IndexControl>();
+                var Wr_data_control = Scope.CreateBus<IndexControl>();
+                var Wz_data_control = Scope.CreateBus<IndexControl>();
+                var preluz_data_control = Scope.CreateBus<IndexControl>();
+                var prelur_data_control = Scope.CreateBus<IndexControl>();
+                var zscale_data_control = Scope.CreateBus<IndexControl>();
+                var x_data_control = Scope.CreateBus<IndexControl>();
+
+                var W0_data = new LoadStage(W0_data_control, (int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size * (int)Deflib.Parameters.input_size, "../Data/W0.csv",(int)Deflib.Parameters.input_size, (int)Deflib.Parameters.num_networks*(int)Deflib.Parameters.hidden_size);
+                var Wr_data = new LoadStage(Wr_data_control, (int)Deflib.Parameters.num_networks * (int)Deflib.Parameters.hidden_size, "../Data/Wr.csv", (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
+                var Wz_data = new LoadStage(Wz_data_control, (int)Deflib.Parameters.num_networks*(int)Deflib.Parameters.hidden_size, "../Data/Wz.csv", (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
+                var Prelu_z_data = new LoadStage(preluz_data_control, (int)Deflib.Parameters.num_networks, "../Data/prelu_z_slopes.csv",(int)Deflib.Parameters.num_networks);
+                var Prelu_r_data = new LoadStage(prelur_data_control, (int)Deflib.Parameters.num_networks, "../Data/prelu_r_slopes.csv",(int)Deflib.Parameters.num_networks);
+                var z_scale_data = new LoadStage(zscale_data_control, (int)Deflib.Parameters.num_networks, "../Data/z_scale.csv", 1, (int)Deflib.Parameters.num_networks);
+                var x_data = new LoadStage(x_data_control, (int)Deflib.Parameters.Batchsize*(int)Deflib.Parameters.input_size, "../Data/x.csv", (int)Deflib.Parameters.Batchsize, (int)Deflib.Parameters.input_size);
 
                 ////// SME ///////////////
-                var transpose = new TransposeStage(W0_data.control, W0_data.output);
+                var transpose = new TransposeStage(W0_data.control_out, W0_data.ram_out);
 
-                var matmul = new MatmulStage(x_data.control, transpose.control_out, x_data.output, transpose.ram_out);
+                var matmul = new MatmulStage(x_data.control_out, transpose.control_out, x_data.ram_out, transpose.ram_out);
 
                 var control_Hz = Scope.CreateBus<IndexControl>();
                 var index_hz = new TestIndexSim(control_Hz, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size, 1);
-                var hz = new HzStage(control_Hz, matmul.control_out, Prelu_z_data.control, matmul.ram_out_1, Prelu_z_data.output);
+                var hz = new HzStage(control_Hz, matmul.control_out, Prelu_z_data.control_out, matmul.ram_out_1, Prelu_z_data.ram_out);
 
                 var control_hr = Scope.CreateBus<IndexControl>();
                 var index_hr = new TestIndexSim(control_hr, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size, 1);
-                var hr = new HzStage(control_hr, matmul.control_out, Prelu_r_data.control, matmul.ram_out_1, Prelu_r_data.output);
+                var hr = new HzStage(control_hr, matmul.control_out, Prelu_r_data.control_out, matmul.ram_out_1, Prelu_r_data.ram_out);
 
                 var control_z= Scope.CreateBus<IndexControl>();
                 var index_z= new TestIndexSim(control_z, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
-                var z = new zStage(control_z, hz.control_out, Wz_data.control, hz.ram_out, Wz_data.output);
+                var z = new zStage(control_z, hz.control_out, Wz_data.control_out, hz.ram_out, Wz_data.ram_out);
 
                 var control_r= Scope.CreateBus<IndexControl>();
                 var index_r= new TestIndexSim(control_r, (int)Deflib.Parameters.num_networks, (int)Deflib.Parameters.hidden_size);
-                var r = new zStage(control_r, hr.control_out, Wr_data.control, hr.ram_out, Wr_data.output);
+                var r = new zStage(control_r, hr.control_out, Wr_data.control_out, hr.ram_out, Wr_data.ram_out);
 
                 var control_SLA_z = Scope.CreateBus<IndexControl>();
                 var index_SLA_z = new TestIndexSim(control_SLA_z, (int)Deflib.Parameters.num_networks,  (int)Deflib.Parameters.hidden_size);
@@ -65,7 +73,7 @@ namespace Feedforward
 
                 var control_zz = Scope.CreateBus<IndexControl>();
                 var index_zz = new TestIndexSim(control_zz, 1, (int)Deflib.Parameters.num_networks);
-                var zz = new zz_Stage(control_zz, z_scale_data.control, SLA_z.control_out, z_scale_data.output, SLA_z.ram_out);
+                var zz = new zz_Stage(control_zz, z_scale_data.control_out, SLA_z.control_out, z_scale_data.ram_out, SLA_z.ram_out);
 
                 var control_sig = Scope.CreateBus<IndexControl>();
                 var index_sig = new TestIndexSim(control_sig, 1, (int)Deflib.Parameters.num_networks);
@@ -107,12 +115,29 @@ namespace Feedforward
                 var outsim_clamp = new OutputSim(clamp.control_out, clamp.ram_out, Expec_val.clamp_expected);
                 var outsim_mean = new OutputSim(mean.control_out, mean.ram_out, Expec_val.mean_expected);
 
-                uint ticks = 0;
+                ulong ticks = 0;
 
                 sim
                     .AddTicker(_ => ticks++)
+                    .AddTopLevelInputs(
+                        W0_data_control, W0_data.ram_out.WriteControl,
+                        Wr_data_control, Wr_data.ram_out.WriteControl,
+                        Wz_data_control, Wz_data.ram_out.WriteControl,
+                        prelur_data_control, Prelu_r_data.ram_out.WriteControl,
+                        preluz_data_control, Prelu_z_data.ram_out.WriteControl,
+                        zscale_data_control, z_scale_data.ram_out.WriteControl,
+                        x_data_control, x_data.ram_out.WriteControl,
+                        control_Hz, control_hr, control_z, control_r,
+                        control_SLA_z, control_SLA_r, control_zz, control_sig, control_mulmin,
+                        control_soft, control_rz, control_clamp, control_mean,
+                        mean.ram_out.ReadControl
+                    )
+                    .AddTopLevelOutputs(
+                        mean.control_out, mean.ram_out.ReadResult
+                    )
                     .BuildCSVFile()
                     .BuildGraph(render_buses:false)
+                    .BuildVHDL()
                     .Run(exitMethod: () =>
                         {
                             OutputSim[] procs =
