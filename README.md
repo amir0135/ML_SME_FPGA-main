@@ -1,6 +1,6 @@
 # ML_SME_FPGA
 
-This repository provides added libraries for implementing a Feedforward Neural Network (FNN) using SME (Small Memory Environment) on FPGA. It includes various components required for building, simulating, and optimizing FNN models for FPGA-based implementations.
+This repository provides added libraries for implementing a Feedforward Neural Network (FNN) using SME ([Synchronous Message Exchange]([url](https://github.com/sme-projects/sme))) on FPGA. It includes various components required for building, simulating, and optimizing FNN models for FPGA-based implementations.
 
 ## Overview
 
