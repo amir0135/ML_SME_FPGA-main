@@ -36,7 +36,7 @@ The repository is organized into several directories that hold different functio
 3. Follow the instructions in the corresponding directories to compile and simulate your neural network model.
 
 ## Dependencies
-- SME (Small Memory Environment)
+- SME ([Synchronous Message Exchange](https://github.com/sme-projects/sme))
 - An FPGA development environment (e.g., Xilinx Vivado)
 
 ## License
