@@ -1,43 +1,73 @@
 # ML_SME_FPGA
 
-This repository provides added libraries for implementing a Feedforward Neural Network (FNN) using SME ([Synchronous Message Exchange](https://github.com/sme-projects/sme)) on FPGA. It includes various components required for building, simulating, and optimizing FNN models for FPGA-based implementations.
+Hardware implementation of a **feedforward ensemble neural network** on FPGA, built with [SME (Synchronous Message Exchange)](https://github.com/sme-projects/sme).
 
-## Overview
+Each mathematical operation in the network — matrix multiplication, transpose, PReLU, sigmoid, softplus, reduction — is implemented as an independent SME process that can be simulated in C# and then exported to VHDL for synthesis. The reference software model lives in [`Feedforward-Network`](https://github.com/amir0135/Feedforward-Network); this repository reproduces it in hardware and validates the two against each other.
 
-This project aims to streamline the integration of FNNs with SME on FPGA. It provides various simulation scripts, pre-trained weights, and activation functions, specifically optimized for FPGA environments.
+Master's thesis work — see the [project hub](https://github.com/amir0135/Master-Thesis-Project-Hub) for the full context.
 
-The repository is organized into several directories that hold different functionalities, such as matrix multiplication, data loading, and simulation scripts, to facilitate the neural network implementation on FPGA.
+## Why SME
 
-## Project Structure
+SME describes hardware as a network of processes communicating over typed buses, with a globally synchronous clock. That gives you two things at once: a C# simulation you can debug with ordinary tooling, and a VHDL export that is cycle-accurate to what you simulated. Every directory below is one process (or process group) in that network.
 
-- **Clamp/**: Includes files related to the clamp operation within the neural network.
-- **Data/**: Contains the pre-trained weight files and other necessary data for neural network simulation.
-- **Deflib/**: Holds various utility scripts, including functions, parameters, and processes needed for the simulation and running of the neural network.
-- **Feedforward/**: Implements the feedforward operation of the neural network.
-- **HzHr/**: Contains scripts for handling Hz and Hr operations within the neural network model.
-- **Matmul/**: Responsible for matrix multiplication processes.
-- **Mean/**: Scripts for calculating the mean within the neural network operations.
-- **SME_raw/**: Raw scripts used for basic operations in SME.
-- **Sigmoid/**: Contains scripts to implement the sigmoid activation function.
-- **Softplus/**: Implements the softplus activation function.
-- **Transpose/**: Handles matrix transpose operations.
-- **mulmin_sig/**: Focuses on operations related to multiplication and minimization combined with sigmoid activation.
-- **sum_lastaxis/**: Handles operations related to summing across the last axis.
-- **z_r/**: Handles operations related to z_r transformations.
-- **zz/**: Implements the zz function used within the neural network model.
+## Repository layout
 
-## Usage
+| Directory | Role |
+|---|---|
+| `Deflib/` | Shared library — bus definitions, parameters, RAM processes, activation functions, simulation scaffolding |
+| `Load_data/` | Reads weight and input CSVs from `Data/` into on-chip memory |
+| `Data/` | Pre-trained weights (`W0`, `Wz`, `Wr`, `z_scale`, PReLU slopes) and test inputs, exported from the PyTorch model |
+| `Matmul/` | Matrix multiplication process |
+| `Transpose/` | Matrix transpose process |
+| `Feedforward/` | Top-level feedforward pass wiring the primitives together |
+| `HzHr/` | Computes the `hz` / `hr` branches (dual PReLU activations) |
+| `RZ/`, `z_r/` | Gate (`z`) and magnitude (`r`) reduction stages |
+| `mulmin_sig/` | Fused multiply–minimise with sigmoid activation |
+| `Sigmoid/` | Sigmoid activation |
+| `Softplus/` | Softplus activation |
+| `Clamp/` | Output clamping to ±`max_predict` |
+| `Mean/` | Ensemble averaging across sub-networks |
+| `sum_lastaxis/` | Reduction along the last axis |
+| `SME_raw/` | Minimal SME examples used as building blocks and sanity checks |
+| `zz/` | Scratch / experimental process |
 
-1. First, download the SME environment from the official SME repository.
-2. Clone this repository:
-   ```bash
-   git clone https://github.com/amir0135/ML_SME_FPGA-main.git
+Each project is a standalone .NET console application with its own `.csproj`, a `Processes.cs` defining the SME processes, and a `simulation.cs` wiring up the test harness.
 
-3. Follow the instructions in the corresponding directories to compile and simulate your neural network model.
+## Prerequisites
 
-## Dependencies
-- SME ([Synchronous Message Exchange](https://github.com/sme-projects/sme))
-- An FPGA development environment (e.g., Xilinx Vivado)
+- [.NET SDK 6.0+](https://dotnet.microsoft.com/download)
+- Optional, for synthesis: [GHDL](https://github.com/ghdl/ghdl) or a vendor toolchain (Vivado, Quartus) to build the exported VHDL
+
+## Running a simulation
+
+Each directory can be run on its own:
+
+```bash
+git clone https://github.com/amir0135/ML_SME_FPGA-main.git
+cd ML_SME_FPGA-main
+
+# Run the full feedforward pass
+dotnet run --project Feedforward
+
+# Or exercise a single primitive
+dotnet run --project Matmul
+dotnet run --project Sigmoid
+```
+
+Simulations read their weights from `Data/`, so run from the repository root.
+
+## VHDL export
+
+SME emits VHDL as part of the simulation run when the exporter is enabled in `simulation.cs`. Generated output lands in the project's `output/` directory alongside a testbench, ready to feed into synthesis.
+
+## Validating against the software model
+
+The CSVs in `Data/` are the same ones consumed by the PyTorch model in [`Feedforward-Network`](https://github.com/amir0135/Feedforward-Network). Running both on the same input lets you diff the outputs and confirm the fixed-point hardware path stays within tolerance of the floating-point reference.
+
+## Tech stack
+
+C# · .NET · SME · VHDL
 
 ## License
-This project is licensed under the MIT License. 
+
+MIT — see [LICENSE](LICENSE).

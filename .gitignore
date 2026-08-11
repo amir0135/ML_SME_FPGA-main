@@ -1,6 +1,15 @@
-*/**/bin
-*/**/obj
-*/**/output
+# .NET
 bin/
 obj/
+*.user
+*.suo
+
+# SME / synthesis output
 output/
+*.vhd.bak
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
